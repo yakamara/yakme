@@ -1,0 +1,14 @@
+#rex-navi-page-install,
+#rex-navi-page-media-manager,
+#rex-navi-page-metainfo,
+#rex-navi-page-modules,
+#rex-navi-page-packages,
+#rex-navi-page-templates,
+a[href="index.php?page=yform/manager/table_edit"] {
+    display: none !important;
+}
+
+#rex-start-of-page:before {
+    content: 'Production';
+    background-color: #f66;
+}

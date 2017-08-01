@@ -1,0 +1,9 @@
+package: yakme
+version: 0.0.1
+author: Yakme - Yakamara CommonBundle for REDAXO
+supportpage: www.redaxo.org/de/forum/
+
+requires:
+    redaxo: '>=5.3'
+    php:
+        version: '>=7'
