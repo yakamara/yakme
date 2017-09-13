@@ -8,7 +8,6 @@ a[href="index.php?page=yform/manager/table_edit"] {
     display: none !important;
 }
 
-#rex-start-of-page:before {
-    content: 'Production';
+.ydeploy-badge {
     background-color: #f66;
 }

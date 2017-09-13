@@ -1,4 +1,3 @@
-#rex-start-of-page:before {
-    content: 'Development';
+.ydeploy-badge {
     background-color: #fc0;
 }

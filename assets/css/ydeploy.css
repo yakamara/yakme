@@ -1,4 +1,4 @@
-#rex-start-of-page:before {
+.ydeploy-badge {
     position: fixed;
     top: 0;
     left: 50%;
@@ -12,4 +12,8 @@
     font-size: 13px;
     font-family: 'Fira Code', 'Menlo', monospace;
     font-weight: 400;
+}
+
+.ydeploy-badge small {
+    font-size: 100%;
 }
