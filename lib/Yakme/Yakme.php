@@ -7,7 +7,7 @@ class Yakme
 
     public static function elixir($file, $media = 'all')
     {
-        $path = \rex_path::base(\rex_path::absolute($file));
+        $path = \rex_path::frontend(\rex_path::absolute($file));
 
         if (!file_exists($path)) {
             return '';
