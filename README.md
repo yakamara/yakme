@@ -2,17 +2,17 @@ Yakme AddOn
 ================================================================================
 ### Beispiele
 
-**Voraussetzungen f?r das Beispiel**
+**Voraussetzungen für das Beispiel**
 
 Folgende Mediatypen anlegen
 
 | Mediatyp | Effekte | Hinweise |
 | ------------- | ------------- | ------------- |
-| **header-16by9** _(16:9 Format)_ | FocusPoint resize | Breite: 2400px; Höhe: 1350px |
+| **header-16by9** _(16:9 Format)_ | FocusPoint resize | Breite: 2400px; Höhe: 1350px; Modus: minimum; Zu klein: enlarge |
 |  | crop | Breite: 2400px; Höhe: 1350px |
-| **header-4by3** _(4:3 Format)_ | FocusPoint resize | Breite: 2400px; Höhe: 1800px |
+| **header-4by3** _(4:3 Format)_ | FocusPoint resize | Breite: 2400px; Höhe: 1800px; Modus: minimum; Zu klein: enlarge |
 |  | crop | Breite: 2400px; Höhe: 1800px |
-| **header-1by1** _(1:1 Format - Quadrat)_ | FocusPoint resize | Breite: 2400px; Höhe: 2400px |
+| **header-1by1** _(1:1 Format - Quadrat)_ | FocusPoint resize | Breite: 2400px; Höhe: 2400px; Modus: minimum; Zu klein: enlarge |
 |  | crop | Breite: 2400px; Höhe: 2400px |
 
 
@@ -63,3 +63,11 @@ echo $media
                 /images/header-1by1--2000/semperoper.jpg 2000w">
 </picture>
 ```
+
+**Ausgabe der Bilder**
+
+| Datei| Bildgröße in px | Verhältnis |
+| ------------- | ------------- | ------------- |
+| /images/`header-1by1--400`/semperoper.jpg 400w | 400 x 400 | 1:1 |
+| /images/`header-4by3--800`/semperoper.jpg 800w | 800 x 600 | 4:3 |
+| /images/`header-16by9--1200`/semperoper.jpg 1200w | 1200 x 675 | 16:9 |
