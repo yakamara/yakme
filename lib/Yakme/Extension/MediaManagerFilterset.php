@@ -16,14 +16,13 @@ class MediaManagerFilterset
 {
     public static function handleResponsiveImages(\rex_extension_point $ep)
     {
-
-        $params = $ep->getParams(); // let's get the parameters
         $subject = $ep->getSubject(); // and the effects array
-        $mediaSourcePosition = strpos($params['rex_media_type'], '--');
+        $mediaType = $ep->getParam('rex_media_type');
+        $mediaSourcePosition = strpos($mediaType, '--');
 
         if($mediaSourcePosition > 0) {
-            $type = substr($params['rex_media_type'], 0, $mediaSourcePosition);
-            $size = (int)substr($params['rex_media_type'], $mediaSourcePosition + 2);
+            $type = substr($mediaType, 0, $mediaSourcePosition);
+            $size = (int)substr($mediaType, $mediaSourcePosition + 2);
 
             $media = new \rex_managed_media('/');
             $mediaManager = new \rex_media_manager($media);
