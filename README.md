@@ -8,12 +8,12 @@ Folgende Mediatypen anlegen
 
 | Mediatyp | Effekte | Hinweise |
 | ------------- | ------------- | ------------- |
-| **header-16by9** _(16:9 Format)_ | FocusPoint resize | Breite: 1600px; Höhe: 900px |
-|  | crop | Breite: 1600px; Höhe: 900px |
-| **header-4by3** _(4:3 Format)_ | FocusPoint resize | Breite: 1200px; Höhe: 900px |
-|  | crop | Breite: 1200px; Höhe: 900px |
-| **header-1by1** _(1:1 Format - Quadrat)_ | FocusPoint resize | Breite: 1600px; Höhe: 1600px |
-|  | crop | Breite: 1600px; Höhe: 1600px |
+| **header-16by9** _(16:9 Format)_ | FocusPoint resize | Breite: 2400px; Höhe: 1350px |
+|  | crop | Breite: 2400px; Höhe: 1350px |
+| **header-4by3** _(4:3 Format)_ | FocusPoint resize | Breite: 2400px; Höhe: 1800px |
+|  | crop | Breite: 2400px; Höhe: 1800px |
+| **header-1by1** _(1:1 Format - Quadrat)_ | FocusPoint resize | Breite: 2400px; Höhe: 2400px |
+|  | crop | Breite: 2400px; Höhe: 2400px |
 
 
 
