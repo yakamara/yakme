@@ -15,9 +15,18 @@ namespace Yakme;
 
 class Media
 {
-
+    /* @var \rex_media */
     public $media;
     private $mediaType = 'max';
+    private $pictureSources = [];
+    private $srcset = [
+        '200' => '200w',
+        '400' => '400w',
+        '800' => '800w',
+        '1200' => '1200w',
+        '1600' => '1600w',
+        '2000' => '2000w',
+    ];
     private $imageLink = [];
     private $caption = [];
     private $copyright = [];
@@ -96,6 +105,84 @@ class Media
 
 
     /**
+     * @param array $params
+     *
+     * @return string
+     */
+    private function getPictureTag(array $params = [])
+    {
+        if (!$this->media->isImage()) {
+            return '';
+        }
+
+        $filename = $this->getUrl();
+        $basename = pathinfo($filename, PATHINFO_FILENAME);
+        $extension = $this->media->getExtension();
+        if ($extension == 'svg') {
+            // svgs
+            $filename = \rex_url::media($this->media->getFileName());
+        }
+        $title = $this->media->getTitle();
+
+        if (!isset($params['alt'])) {
+            $params['alt'] = htmlspecialchars($title);
+        }
+
+        if (!isset($params['title'])) {
+            if ($title != '') {
+                $params['title'] = htmlspecialchars($title);
+            }
+        }
+
+        $srcSet = [];
+        if (count($this->srcset) > 0) {
+            foreach ($this->srcset as $index => $size) {
+                $srcSet[$size] = '--' . $index . '/' . $basename .  '.' . $extension;
+            }
+        }
+
+        $sourceTags = [];
+        if (count($this->pictureSources) > 0) {
+            foreach ($this->pictureSources as $index => $pictureSource) {
+                $attributes = [];
+                if ($pictureSource['media'] != '') {
+                    $attributes['media'] = $pictureSource['media'];
+                }
+                if ($pictureSource['sizes'] != '') {
+                    $attributes['sizes'] = $pictureSource['sizes'];
+                }
+                if ($pictureSource['mediaType'] != '') {
+                    $tmpMedia = clone $this;
+                    $tmpPath = pathinfo($tmpMedia->setMediaType($pictureSource['mediaType'])->getUrl(), PATHINFO_DIRNAME);
+                    $sources = [];
+                    foreach ($srcSet as $size => $file) {
+                        $sources[] = $tmpPath . $file . ' ' . $size;
+                    }
+                    $attributes['srcset'] = implode(',' . "\n", $sources);
+                }
+
+                $sourceTags[] = sprintf('<source%s />', \rex_string::buildAttributes($attributes));
+            }
+        }
+
+        $tmpPath = pathinfo($filename, PATHINFO_DIRNAME);
+        $filename = str_replace($this->getMediaType(), $this->getMediaType(). '--400', $filename);
+        $sources = [];
+        foreach ($srcSet as $size => $file) {
+            $sources[] = $tmpPath . $file . ' ' . $size;
+        }
+        $params['srcset'] = implode(',' . "\n", $sources);
+        // $srcSet = (count($srcSet) > 0) ? implode(',', $srcSet) : '';
+        // dump($srcSet);
+        // \rex_extension::registerPoint(new \rex_extension_point('MEDIA_TOIMAGE', '', ['filename' => &$filename, 'params' => &$params]));
+
+        $image = sprintf('<picture>%s<img src="%s"%s /></picture>', implode("\n", $sourceTags), $filename, \rex_string::buildAttributes($params));
+        $image = $this->getImageLink($image);
+        return $image;
+    }
+
+
+    /**
      * @return string
      */
     public function getMediaType()
@@ -119,6 +206,37 @@ class Media
 
 
     /**
+     * @param array $srcSet
+     *
+     * @return $this|\Yakme\Media
+     */
+    public function setSrcSet(array $srcSet)
+    {
+        $this->srcset = $srcSet;
+        return $this;
+    }
+
+
+    /**
+     * @param string $media
+     * @param string $sizes
+     * @param string $mediaType
+     *
+     * @return $this|\Yakme\Media
+     */
+    public function addPictureSource($media, $sizes = '', $mediaType = '')
+    {
+        if ($mediaType == '') {
+            $mediaType = $this->mediaType;
+        }
+        $this->pictureSources[] = ['media' => $media, 'sizes' => $sizes, 'mediaType' => $mediaType];
+        return $this;
+    }
+
+
+    /**
+     * @param string $image
+     *
      * @return string
      */
     protected function getImageLink($image)
@@ -306,6 +424,32 @@ class Media
     }
 
 
+    /**
+     * @param array $params
+     *
+     * @return string
+     */
+    public function toPicture(array $params = [])
+    {
+        $picture = $this->getPictureTag($params);
+
+        if ($picture == '') {
+            return '';
+        }
+
+        $caption = '';
+        if ($this->caption) {
+            $caption = sprintf('<span%s>%s</span>', \rex_string::buildAttributes($this->caption['attributes']), $this->caption['value']);
+        }
+        $copyright = '';
+        if ($this->copyright) {
+            $copyright = sprintf('<footer%s><small>&copy; %s</small></footer>', \rex_string::buildAttributes($this->copyright['attributes']), $this->copyright['value']);
+        }
+
+        return $picture.$copyright.$caption;
+    }
+
+
     public function getIcon($useDefaultIcon = true)
     {
         $ext = $this->media->getExtension();
@@ -362,9 +506,13 @@ class Media
         }
 
         //return '<a href="/download/' . $this->media->getFileName() . '">' . $label . '</a>';
-        return sprintf('<a%s href="%s">%s</a>', \rex_string::buildAttributes($attributes), '/download/' . $this->media->getFileName(), $label);
+        return sprintf('<a%s href="%s">%s</a>', \rex_string::buildAttributes($attributes), $this->getDownloadUrl(), $label);
     }
 
+    public function getDownloadUrl()
+    {
+        return '/download/' . $this->media->getFileName();
+    }
 
     public function getMimeExtension()
     {
