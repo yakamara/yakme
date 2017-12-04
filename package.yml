@@ -7,3 +7,9 @@ requires:
     redaxo: '>=5.3'
     php:
         version: '>=7'
+
+html_section_options:
+    - Yakme\Html\SectionOption\AppendHtml
+    - Yakme\Html\SectionOption\Attributes
+    - Yakme\Html\SectionOption\Html
+    - Yakme\Html\SectionOption\PrependHtml

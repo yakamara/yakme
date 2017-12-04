@@ -14,41 +14,78 @@ namespace Yakme;
 
 class Html
 {
+    /**
+     * @param        $url
+     * @param string $label
+     *
+     * @return string
+     */
     public static function getDownloadButton($url, $label = '{{ download }}')
     {
         return '<a class="button-download" href="' . $url . '"><i class="icon-download"></i>' . $label . '</a>';
     }
 
+
+    /**
+     * @param        $url
+     * @param string $label
+     *
+     * @return string
+     */
     public static function getDownloadLink($url, $label = '{{ download }}')
     {
         return '<a href="' . $url . '"><i class="icon-download"></i>' . $label . '</a>';
     }
 
+    /**
+     * @param       $email
+     * @param null  $label
+     * @param array $attributes
+     *
+     * @return string
+     */
     public static function getEmailLink($email, $label = null, array $attributes = [])
     {
         if (!$label) {
             $label = $email;
         }
-        return sprintf('<a%s href="mailto:%s">%s</a>', \rex_string::buildAttributes($attributes), $email, $label);
+        $attributes = self::prepareAttributes($attributes, ['class' => 'email-link']);
+        return self::getLink('mailto:' . $email, $label, $attributes);
     }
 
-    public static function getLink($url, $label = null)
+
+    public static function getLink($url, $label = null, array $attributes = [])
     {
         if (!$label) {
             $label = $url;
         }
-        return '<a href="' . $url . '">' . $label . '</a>';
+        $attributes = self::prepareAttributes($attributes, ['href' => $url]);
+        return sprintf('<a%s>%s</a>', \rex_string::buildAttributes($attributes), $label);
     }
 
+    /**
+     * @param       $number
+     * @param null  $label
+     * @param array $attributes
+     *
+     * @return string
+     */
     public static function getPhoneLink($number, $label = null, array $attributes = [])
     {
         if (!$label) {
             $label = $number;
         }
-        return sprintf('<a%s href="tel:%s">%s</a>', \rex_string::buildAttributes($attributes), preg_replace('/[^0-9]+/', '', $number), $label);
+        $attributes = self::prepareAttributes($attributes, ['class' => 'phone-link']);
+        return self::getLink('tel:' . preg_replace('/[^0-9]+/', '', $number), $label, $attributes);
     }
 
-    public static function getUrlLink($url)
+    /**
+     * @param string $url
+     * @param array $attributes
+     *
+     * @return string
+     */
+    public static function getUrlLink($url, array $attributes = [])
     {
         if (trim($url) == '') {
             return '';
@@ -62,6 +99,12 @@ class Html
             $scheme = 'https://';
             $cleanUrl = substr($url, 8);
         }
-        return self::getLink($scheme . $cleanUrl, $cleanUrl);
+        $attributes = self::prepareAttributes($attributes, ['class' => 'external-link']);
+        return self::getLink($scheme . $cleanUrl, $cleanUrl, $attributes);
+    }
+
+    protected static function prepareAttributes($arrayA, $arrayB)
+    {
+        return array_merge_recursive($arrayA, $arrayB);
     }
 }
