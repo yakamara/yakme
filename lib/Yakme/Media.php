@@ -26,10 +26,17 @@ class Media
         '1200' => '1200w',
         '1600' => '1600w',
         '2000' => '2000w',
+        '2400' => '2400w',
     ];
+    private $usePicture = false;
     private $imageLink = [];
     private $caption = [];
     private $copyright = [];
+    private $audioTypes = [
+        'mp3' => 'audio/mp3',
+        'ogg' => 'audio/ogg',
+        'wav' => 'audio/wav',
+    ];
     private $videoTypes = [
         'mp4' => 'video/mp4',
         'webm' => 'video/webm',
@@ -50,6 +57,7 @@ class Media
      */
     public static function get($name)
     {
+
         $instance = new self($name);
         if ($instance->media) {
             return $instance;
@@ -80,11 +88,11 @@ class Media
             return '';
         }
 
-        $filename = $this->getUrl();
-        if ($this->media->getExtension() == 'svg') {
-            // svgs
-            $filename = \rex_url::media($this->media->getFileName());
+        $filename = \rex_url::media($this->media->getFileName());
+        if ($this->isRasterFile()) {
+            $filename = $this->getUrl();
         }
+
         $title = $this->media->getTitle();
 
         if (!isset($params['alt'])) {
@@ -105,11 +113,12 @@ class Media
 
 
     /**
-     * @param array $params
+     * @param array $attributesPicture
+     * @param array $attributesImage
      *
      * @return string
      */
-    private function getPictureTag(array $params = [])
+    private function getPictureTag(array $attributesPicture = [], array $attributesImage = [])
     {
         if (!$this->media->isImage()) {
             return '';
@@ -118,24 +127,25 @@ class Media
         $filename = $this->getUrl();
         $basename = pathinfo($filename, PATHINFO_FILENAME);
         $extension = $this->media->getExtension();
-        if ($extension == 'svg') {
-            // svgs
+
+        if (!$this->isRasterFile()) {
             $filename = \rex_url::media($this->media->getFileName());
         }
+
         $title = $this->media->getTitle();
 
-        if (!isset($params['alt'])) {
-            $params['alt'] = htmlspecialchars($title);
+        if (!isset($attributesImage['alt'])) {
+            $attributesImage['alt'] = htmlspecialchars($title);
         }
 
-        if (!isset($params['title'])) {
+        if (!isset($attributesImage['title'])) {
             if ($title != '') {
-                $params['title'] = htmlspecialchars($title);
+                $attributesImage['title'] = htmlspecialchars($title);
             }
         }
 
         $srcSet = [];
-        if (count($this->srcset) > 0) {
+        if (count($this->srcset) > 0 && $this->isRasterFile()) {
             foreach ($this->srcset as $index => $size) {
                 $srcSet[$size] = '--' . $index . '/' . $basename .  '.' . $extension;
             }
@@ -171,12 +181,11 @@ class Media
         foreach ($srcSet as $size => $file) {
             $sources[] = $tmpPath . $file . ' ' . $size;
         }
-        $params['srcset'] = implode(',' . "\n", $sources);
-        // $srcSet = (count($srcSet) > 0) ? implode(',', $srcSet) : '';
-        // dump($srcSet);
-        // \rex_extension::registerPoint(new \rex_extension_point('MEDIA_TOIMAGE', '', ['filename' => &$filename, 'params' => &$params]));
+        if (count($sources)) {
+            $attributesImage['srcset'] = implode(',' . "\n", $sources);
+        }
 
-        $image = sprintf('<picture>%s<img src="%s"%s /></picture>', implode("\n", $sourceTags), $filename, \rex_string::buildAttributes($params));
+        $image = sprintf('<picture%s>%s<img src="%s"%s /></picture>', \rex_string::buildAttributes($attributesPicture), implode("\n", $sourceTags), $filename, \rex_string::buildAttributes($attributesImage));
         $image = $this->getImageLink($image);
         return $image;
     }
@@ -218,6 +227,16 @@ class Media
 
 
     /**
+     * @return $this|\Yakme\Media
+     */
+    public function usePicture()
+    {
+        $this->usePicture = true;
+        return $this;
+    }
+
+
+    /**
      * @param string $media
      * @param string $sizes
      * @param string $mediaType
@@ -226,6 +245,8 @@ class Media
      */
     public function addPictureSource($media, $sizes = '', $mediaType = '')
     {
+        $this->usePicture();
+
         if ($mediaType == '') {
             $mediaType = $this->mediaType;
         }
@@ -245,6 +266,34 @@ class Media
             $image = '<a href="' . $this->imageLink['url'] . '"' . \rex_string::buildAttributes($this->imageLink['attributes']) . '>' . $image . '</a>';
         }
         return $image;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getImageSrcSet()
+    {
+        $filename = $this->getUrl();
+        $basename = pathinfo($filename, PATHINFO_FILENAME);
+        $extension = $this->media->getExtension();
+
+        if (count($this->srcset) > 0 && $this->isRasterFile()) {
+            $srcSet = [];
+            foreach ($this->srcset as $index => $size) {
+                $srcSet[$size] = '--' . $index . '/' . $basename .  '.' . $extension;
+            }
+
+            $tmpPath = pathinfo($filename, PATHINFO_DIRNAME);
+            $sources = [];
+            foreach ($srcSet as $size => $file) {
+                $sources[] = $tmpPath . $file . ' ' . $size;
+            }
+
+            return implode(',' . "\n", $sources);
+        }
+
+        return false;
     }
 
 
@@ -379,7 +428,12 @@ class Media
      */
     public function toFigure(array $attributes = [], array $attributesParams = [])
     {
-        $image = $this->getImageTag($attributesParams);
+        $image = '';
+        if ($this->usePicture === true) {
+            $image = $this->getPictureTag([], $attributesParams);
+        } else {
+            $image = $this->getImageTag($attributesParams);
+        }
 
         if ($image == '') {
             return '';
@@ -425,13 +479,13 @@ class Media
 
 
     /**
-     * @param array $params
+     * @param array $attributes
      *
      * @return string
      */
-    public function toPicture(array $params = [])
+    public function toPicture(array $attributes = [], array $attributesParams = [])
     {
-        $picture = $this->getPictureTag($params);
+        $picture = $this->getPictureTag($attributes, $attributesParams);
 
         if ($picture == '') {
             return '';
@@ -581,5 +635,52 @@ class Media
                 ' . $videoSource . '
                 ' . $videoFlash . '
             </video>';
+    }
+
+
+    public function isAudio()
+    {
+        return isset($this->audioTypes[$this->media->getExtension()]);
+    }
+
+    public function toAudio(array $attributes = [])
+    {
+        $filename = substr($this->media->getFilename(), 0, strrpos($this->media->getFilename(), '.'));
+        $audioAttributes = [
+            'controls' => 'controls',
+        ];
+
+        $attributes = array_merge($audioAttributes, $attributes);
+
+        $sources = [];
+        foreach ($this->audioTypes as $extension => $type) {
+            $audioObject = \rex_media::get($filename . '.' . $extension);
+            if ($audioObject) {
+                $sources[] = sprintf('<source src="%s" type="%s" />', \rex_url::media($audioObject->getFileName()), $type);
+            }
+        }
+
+        return '
+            <audio' . \rex_string::buildAttributes($attributes) . '>
+                ' . implode('', $sources) . '
+            </audio>';
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRasterFile()
+    {
+        return self::isRasterType($this->media->getExtension());
+    }
+
+    public static function getRasterTypes()
+    {
+        return array_diff(\rex_addon::get('mediapool')->getProperty('image_extensions'), ['svg']);
+    }
+
+    public static function isRasterType($extension)
+    {
+        return in_array($extension, self::getRasterTypes());
     }
 }
