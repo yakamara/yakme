@@ -26,15 +26,10 @@ class Yakme
             case 'js':
                 return '<script type="text/javascript" src="' . $file .'"></script>';
             case 'svg':
-                return '<div style="display: none;">' . \rex_file::get($path) . '</div>';
+                return '<div id="svg-symbols" style="display: none;">' . \rex_file::get($path) . '</div>';
         }
 
         return '';
-    }
-
-    public static function svg($id, $title, $class = null)
-    {
-        return '<svg' . ($class ? ' class="' . $class . '"' : '') .'><title>' . $title . '</title><use xlink:href="#' . $id . '"></use></svg>';
     }
 
     public static function trans($value)
