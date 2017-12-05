@@ -23,8 +23,14 @@ if (!function_exists('trans')) {
     }
 }
 
+
+if (rex_addon::get('media_manager')->isAvailable()) {
+    rex_media_manager::addEffect(\rex_effect_responsive::class);
+}
+
 // rex_media_manager::deleteCache();
-rex_extension::register('MEDIA_MANAGER_FILTERSET', '\Yakme\Extension\MediaManagerFilterset::handleResponsiveImages', rex_extension::EARLY);
+rex_extension::register('MEDIA_MANAGER_FILTERSET', '\rex_effect_responsive::handle', rex_extension::EARLY);
+
 
 rex_extension::register('MEDIA_URL_REWRITE', function (rex_extension_point $ep) {
     $object = $ep->getParam('media');

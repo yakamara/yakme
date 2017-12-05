@@ -1,0 +1,9 @@
+media_manager_effect_crop = :crop
+media_manager_effect_resize = :resize
+media_manager_effect_rotate = :rotate
+media_manager_effect_srcset = :srcset
+
+rex_effect_focuspoint_fit = :focuspoint fit
+rex_effect_focuspoint_resize = :focuspoint resize
+
+yakme_media_manager_effect_responsive = :responsive images

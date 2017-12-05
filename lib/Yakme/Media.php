@@ -30,6 +30,7 @@ class Media
     ];
     private $usePicture = false;
     private $imageLink = [];
+    private $imageSizes = [];
     private $caption = [];
     private $copyright = [];
     private $audioTypes = [
@@ -147,7 +148,7 @@ class Media
         $srcSet = [];
         if (count($this->srcset) > 0 && $this->isRasterFile()) {
             foreach ($this->srcset as $index => $size) {
-                $srcSet[$size] = '--' . $index . '/' . $basename .  '.' . $extension;
+                $srcSet[$size] = '/' . $index . '/' . $basename .  '.' . $extension;
             }
         }
 
@@ -176,13 +177,16 @@ class Media
         }
 
         $tmpPath = pathinfo($filename, PATHINFO_DIRNAME);
-        $filename = str_replace($this->getMediaType(), $this->getMediaType(). '--400', $filename);
+        $filename = str_replace($this->getMediaType(), $this->getMediaType(). '/400', $filename);
         $sources = [];
         foreach ($srcSet as $size => $file) {
             $sources[] = $tmpPath . $file . ' ' . $size;
         }
         if (count($sources)) {
             $attributesImage['srcset'] = implode(',' . "\n", $sources);
+        }
+        if ($this->imageSizes != '') {
+            $attributesImage['sizes'] = $this->imageSizes;
         }
 
         $image = sprintf('<picture%s>%s<img src="%s"%s /></picture>', \rex_string::buildAttributes($attributesPicture), implode("\n", $sourceTags), $filename, \rex_string::buildAttributes($attributesImage));
@@ -281,7 +285,7 @@ class Media
         if (count($this->srcset) > 0 && $this->isRasterFile()) {
             $srcSet = [];
             foreach ($this->srcset as $index => $size) {
-                $srcSet[$size] = '--' . $index . '/' . $basename .  '.' . $extension;
+                $srcSet[$size] = '/' . $index . '/' . $basename .  '.' . $extension;
             }
 
             $tmpPath = pathinfo($filename, PATHINFO_DIRNAME);
@@ -314,15 +318,27 @@ class Media
 
 
     /**
+     * @param string $sizes
+     *
+     * @return $this|\Yakme\Media
+     */
+    public function addImageSizes($sizes)
+    {
+        $this->imageSizes= $sizes;
+        return $this;
+    }
+
+
+    /**
      * @param string $field
      *
      * @return string
      */
     public function getCaption($field = 'med_caption')
     {
-        $value = trim($this->media->getValue($field));
+        $value = $this->media->getValue($field);
         if ($value != '') {
-            return $value;
+            return trim($value);
         }
 
         $value = isset($this->caption['value']) ? $this->caption['value'] : '';
