@@ -5,6 +5,9 @@ supportpage: www.redaxo.org/de/forum/
 
 requires:
     redaxo: '>=5.3'
+    packages:
+        media_manager: '^2.0'
+        mediapool: '^2.0'
     php:
         version: '>=7'
 
