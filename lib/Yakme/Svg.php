@@ -19,4 +19,10 @@ class Svg
     {
         return '<svg' . ($class ? ' class="' . $class . '"' : '') .' aria-hidden="true">' . ($title ? '<title>' . $title . '</title>' : '') . '<use xlink:href="#' . $id . '"></use></svg>';
     }
+
+    public static function file($file)
+    {
+        $path = \rex_path::frontend(\rex_path::absolute($file));
+        return \rex_file::get($path);
+    }
 }
