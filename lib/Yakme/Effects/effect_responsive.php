@@ -46,7 +46,7 @@ class rex_effect_responsive extends rex_effect_abstract
         foreach ($effects as $index => $effect) {
             if (isset($effect['params']['width'])) {
                 if (isset($effect['params']['height']) && (int)$effect['params']['height'] > 0) {
-                    $effect['params']['height'] = (int)$effect['params']['height'] * $data['size'] / (int)$effect['params']['width'];
+                    $effect['params']['height'] = ceil((int)$effect['params']['height'] * $data['size'] / (int)$effect['params']['width']);
                 }
                 $effect['params']['width'] = $data['size'];
             }
