@@ -7,16 +7,25 @@ Yakme AddOn
 
 **Voraussetzungen für das Beispiel**
 
+`.htaccess` öffnen und ergännzen
+
+```
+# -yakme- = Separator for responsive images
+RewriteRule ^images/([^/]*)/([^/]*)/([^/]*) %{ENV:BASE}/index.php?rex_media_type=$1&rex_media_file=$3-yakme-$2&%{QUERY_STRING} [B]
+```
+
+
+
 Folgende Mediatypen anlegen
 
 | Mediatyp | Effekte | Hinweise |
 | ------------- | ------------- | ------------- |
-| **header-16by9** _(16:9 Format)_ | FocusPoint resize | Breite: 2400px; Höhe: 1350px; Modus: minimum; Zu klein: enlarge |
-|  | crop | Breite: 2400px; Höhe: 1350px |
-| **header-4by3** _(4:3 Format)_ | FocusPoint resize | Breite: 2400px; Höhe: 1800px; Modus: minimum; Zu klein: enlarge |
-|  | crop | Breite: 2400px; Höhe: 1800px |
-| **header-1by1** _(1:1 Format - Quadrat)_ | FocusPoint resize | Breite: 2400px; Höhe: 2400px; Modus: minimum; Zu klein: enlarge |
-|  | crop | Breite: 2400px; Höhe: 2400px |
+| **header-16by9** _(16:9 Format)_ | :responsive&nbsp;images |  |
+|  | :focuspoint fit | Breite: 2400px; Höhe: 1350px;<br /> Zoom: Ausschnitt größtmöglich wählen (100%); Ausrichten an: Fokuspunkt des Bildes |
+| **header-4by3** _(4:3 Format)_ | :responsive&nbsp;images |  |
+| |  :focuspoint fit | Breite: 2400px; Höhe: 1800px;<br /> Zoom: Ausschnitt größtmöglich wählen (100%); Ausrichten an: Fokuspunkt des Bildes |
+| **header-1by1** _(1:1 Format - Quadrat)_ |  :responsive&nbsp;images |  |
+| | :focuspoint fit | Breite: 2400px; Höhe: 2400px<br /> Zoom: Ausschnitt größtmöglich wählen (100%); Ausrichten an: Fokuspunkt des Bildes |
 
 
 
@@ -37,33 +46,33 @@ echo $media
 ```html
 <picture>
     <source media="(min-width: 1200px)" sizes="50vw"
-        srcset="/images/header-16by9--200/semperoper.jpg 200w,
-                /images/header-16by9--400/semperoper.jpg 400w,
-                /images/header-16by9--800/semperoper.jpg 800w,
-                /images/header-16by9--1200/semperoper.jpg 1200w,
-                /images/header-16by9--1600/semperoper.jpg 1600w,
-                /images/header-16by9--2000/semperoper.jpg 2000w">
+        srcset="/images/header-16by9/200/semperoper.jpg 200w,
+                /images/header-16by9/400/semperoper.jpg 400w,
+                /images/header-16by9/800/semperoper.jpg 800w,
+                /images/header-16by9/1200/semperoper.jpg 1200w,
+                /images/header-16by9/1600/semperoper.jpg 1600w,
+                /images/header-16by9/2000/semperoper.jpg 2000w">
     <source media="(min-width: 992px)" sizes="70vw"
-        srcset="/images/header-16by9--200/semperoper.jpg 200w,
-                /images/header-16by9--400/semperoper.jpg 400w,
-                /images/header-16by9--800/semperoper.jpg 800w,
-                /images/header-16by9--1200/semperoper.jpg 1200w,
-                /images/header-16by9--1600/semperoper.jpg 1600w,
-                /images/header-16by9--2000/semperoper.jpg 2000w">
+        srcset="/images/header-16by9/200/semperoper.jpg 200w,
+                /images/header-16by9/400/semperoper.jpg 400w,
+                /images/header-16by9/800/semperoper.jpg 800w,
+                /images/header-16by9/1200/semperoper.jpg 1200w,
+                /images/header-16by9/1600/semperoper.jpg 1600w,
+                /images/header-16by9/2000/semperoper.jpg 2000w">
     <source media="(min-width: 768px)" sizes="80vw"
-        srcset="/images/header-4by3--200/semperoper.jpg 200w,
-                /images/header-4by3--400/semperoper.jpg 400w,
-                /images/header-4by3--800/semperoper.jpg 800w,
-                /images/header-4by3--1200/semperoper.jpg 1200w,
-                /images/header-4by3--1600/semperoper.jpg 1600w,
-                /images/header-4by3--2000/semperoper.jpg 2000w">
-    <img src="/images/header-1by1--400/semperoper.jpg" alt="Semperoper" title="Semperoper"
-        srcset="/images/header-1by1--200/semperoper.jpg 200w,
-                /images/header-1by1--400/semperoper.jpg 400w,
-                /images/header-1by1--800/semperoper.jpg 800w,
-                /images/header-1by1--1200/semperoper.jpg 1200w,
-                /images/header-1by1--1600/semperoper.jpg 1600w,
-                /images/header-1by1--2000/semperoper.jpg 2000w">
+        srcset="/images/header-4by3/200/semperoper.jpg 200w,
+                /images/header-4by3/400/semperoper.jpg 400w,
+                /images/header-4by3/800/semperoper.jpg 800w,
+                /images/header-4by3/1200/semperoper.jpg 1200w,
+                /images/header-4by3/1600/semperoper.jpg 1600w,
+                /images/header-4by3/2000/semperoper.jpg 2000w">
+    <img src="/images/header-1by1/400/semperoper.jpg" alt="Semperoper" title="Semperoper"
+        srcset="/images/header-1by1/200/semperoper.jpg 200w,
+                /images/header-1by1/400/semperoper.jpg 400w,
+                /images/header-1by1/800/semperoper.jpg 800w,
+                /images/header-1by1/1200/semperoper.jpg 1200w,
+                /images/header-1by1/1600/semperoper.jpg 1600w,
+                /images/header-1by1/2000/semperoper.jpg 2000w">
 </picture>
 ```
 
@@ -71,9 +80,9 @@ echo $media
 
 | Datei| Bildgröße in px | Verhältnis |
 | ------------- | ------------- | ------------- |
-| /images/`header-1by1--400`/semperoper.jpg 400w | 400 x 400 | 1:1 |
-| /images/`header-4by3--800`/semperoper.jpg 800w | 800 x 600 | 4:3 |
-| /images/`header-16by9--1200`/semperoper.jpg 1200w | 1200 x 675 | 16:9 |
+| /images/`header-1by1/400`/semperoper.jpg 400w | 400 x 400 | 1:1 |
+| /images/`header-4by3/800`/semperoper.jpg 800w | 800 x 600 | 4:3 |
+| /images/`header-16by9/1200`/semperoper.jpg 1200w | 1200 x 675 | 16:9 |
 
 
 
@@ -205,6 +214,7 @@ if (rex::isBackend()) {
 In der Modulausgabe werden Platzhalter erstellt, die vor der Ausgabe des Inhaltes in Sektionen umgewandelt werden.
 
 **Beispiele erstellter Platzhalter**
+
 ```
 {{{ HTML_SECTION__DECOR|options(prependHtml::=>::"<div class=\"decor\" data-theme=\"computer\"><svg aria-hidden=\"true\"><use xlink:href=\"#wallpaper\"><\/use><\/svg><\/div>") }}}
 
@@ -269,5 +279,29 @@ return '<main>' . $content . '</main>';
         >>> Modul Text
     </div>
 </section>
+
+```
+
+
+## Media
+
+### Download
+
+
+**Voraussetzungen**
+
+`.htaccess` öffnen und ergännzen
+
+```
+RewriteRule ^download/([^/]*) %{ENV:BASE}/index.php?download_file=$1&%{QUERY_STRING} [B]
+```
+
+**Beispiel**
+
+```php
+$media = Media::get('REX_MEDIA[1]');
+if ($media) {
+    echo sprintf('<a href="%s">Download</a>', $media->getDownloadUrl());
+}
 
 ```
