@@ -9,6 +9,7 @@ class Download
 
     public function __construct($filename, $dir = '')
     {
+        $filename = basename($filename);
         $this->path = null;
         if (file_exists($dir . $filename)) {
             $this->path = $dir . $filename;
