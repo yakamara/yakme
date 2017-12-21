@@ -37,7 +37,12 @@ rex_extension::register('MEDIA_URL_REWRITE', function (rex_extension_point $ep) 
     if ($object->media->getExtension() == 'svg') {
         return \rex_url::media($object->media->getFileName());
     }
-    $type = (\rex::isBackend()) ? 'rex_mediapool_maximized' : $object->getMediaType();
+    // $type = (\rex::isBackend()) ? 'rex_mediapool_maximized' : $object->getMediaType();
+    $type = $object->getMediaType();
+    if (\rex::isBackend()) {
+        $type = 'rex_mediabutton_preview';
+        $object->setSrcSet([]);
+    }
     return rex_url::frontend('images/' . $type . '/' . $object->media->getFileName());
 }, rex_extension::EARLY);
 
