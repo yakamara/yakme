@@ -305,3 +305,15 @@ if ($media) {
 }
 
 ```
+
+
+## MetaInfos
+
+### auf Ebenen einschränken
+
+
+Feld `legend` mit den Feldattributen `data-hide-levels data-show-level="1"` anlegen.
+Damit sagt man, dass alles was in diesem `fieldset` liegt, nur auf der **ersten Ebene** angezeigt wird.
+
+**Wichtig:** 
+Ganz am Ende ein Feld `legend` anlegen damit der Button `Metadaten aktualisieren` nicht verschwindet sobald die MetaInfos versteckt werden.

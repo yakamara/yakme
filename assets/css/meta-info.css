@@ -1,0 +1,29 @@
+.rex-main-sidebar [data-hide-levels],
+.rex-main-sidebar [data-hide-levels] ~ * {
+    display: none;
+}
+
+[data-structure-level="1"] .rex-main-sidebar [data-show-level="1"],
+[data-structure-level="1"] .rex-main-sidebar [data-show-level="1"] ~ * {
+    display: block;
+}
+
+[data-structure-level="2"] .rex-main-sidebar [data-show-level="2"],
+[data-structure-level="2"] .rex-main-sidebar [data-show-level="2"] ~ * {
+    display: block;
+}
+
+[data-structure-level="3"] .rex-main-sidebar [data-show-level="3"],
+[data-structure-level="3"] .rex-main-sidebar [data-show-level="3"] ~ * {
+    display: block;
+}
+
+[data-structure-level="4"] .rex-main-sidebar [data-show-level="4"],
+[data-structure-level="4"] .rex-main-sidebar [data-show-level="4"] ~ * {
+    display: block;
+}
+
+[data-structure-level="5"] .rex-main-sidebar [data-show-level="5"],
+[data-structure-level="5"] .rex-main-sidebar [data-show-level="5"] ~ * {
+    display: block;
+}
