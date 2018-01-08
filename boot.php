@@ -48,6 +48,11 @@ rex_extension::register('MEDIA_URL_REWRITE', function (rex_extension_point $ep) 
 
 
 
+// Spezielle YForm-Values auf Verknüpfungen prüfen, sobald Medien, Katgorien oder Artikel gelöscht werden.
+\rex_extension::register('MEDIA_IS_IN_USE', '\Yakme\Extension\YForm::isMediaInUse');
+\rex_extension::register('PACKAGES_INCLUDED', '\Yakme\Extension\YForm::isArticleInUse');
+
+
 
 // Html Section
 // - - - - - - - - - - - - - - - - - - - - - - - - - -

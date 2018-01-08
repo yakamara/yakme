@@ -317,3 +317,35 @@ Damit sagt man, dass alles was in diesem `fieldset` liegt, nur auf der **ersten 
 
 **Wichtig:** 
 Ganz am Ende ein Feld `legend` anlegen damit der Button `Metadaten aktualisieren` nicht verschwindet sobald die MetaInfos versteckt werden.
+
+
+## YForm
+
+Sobald Medien, Katgorien oder Artikel gelöscht werden, prüft Yakme auf deren Verknüpfungen und unterbinded ggf. das Löschen.
+
+**Diese Feldertypen werden automatisch geprüft**
+- be_media
+- be_link
+- be_select_category
+- mediafile
+
+Es kann jedoch vorkommen, dass eigene Felder ebenfalls Daten einer Kategorie-Id, Artikel-Id oder eines Mediums enthalten. Ein Bspl. wäre ein normales `select`, welches bestimmte Kategorien zur Auswahl enthält.
+
+Hierfür stehen 2 ExtensionPoints zur Verfügung
+
+- `YFORM_ARTICLE_IS_IN_USE`
+- `YFORM_MEDIA_IS_IN_USE`
+
+```php
+// Spezielle YForm-Values prüfen, sobald Katgorie oder Artikel gelöscht werden.
+\rex_extension::register('YFORM_ARTICLE_IS_IN_USE', function(\rex_extension_point $ep) {
+    $fields = [
+        [
+            'table_name' => \rex::getTable('table'),
+            'name' => 'category_id',
+            'multiple' => '0',
+        ]
+    ];
+    return array_merge($ep->getSubject(), $fields);
+});
+``
