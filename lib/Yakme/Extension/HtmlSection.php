@@ -12,7 +12,6 @@ use Yakme\Html\SectionOption;
  * file that was distributed with this source code.
  */
 
-
 namespace Yakme\Extension;
 
 use Yakme\Html\Section;

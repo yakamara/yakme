@@ -51,6 +51,7 @@ class SectionCreator
             $string .= '|options(' . implode('::,::', $options) . ')';
         }
 
+        $string .= '|' . rand(100, 999) . rand(100, 999);
         $string .= ' ';
         $string .= Section::CLOSE_TAG;
 
