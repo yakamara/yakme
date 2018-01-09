@@ -7,3 +7,6 @@ rex_effect_focuspoint_fit = :focuspoint fit
 rex_effect_focuspoint_resize = :focuspoint resize
 
 yakme_media_manager_effect_responsive = :responsive images
+
+yform_structure_article_could_not_be_deleted = Artikel konnte nicht gelöscht werden. Dieser ist noch mit folgenden Datensätzen verknüpft.
+yform_structure_category_could_not_be_deleted = Kategorie konnte nicht gelöscht werden. Diese ist noch mit folgenden Datensätzen verknüpft.
