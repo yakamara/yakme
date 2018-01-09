@@ -18,6 +18,7 @@ class Media
     /* @var \rex_media */
     public $media;
     private $mediaType = 'max';
+    private $pictureAttributes = [];
     private $pictureSources = [];
     private $srcset = [
         '200' => '200w',
@@ -125,6 +126,8 @@ class Media
             return '';
         }
 
+        $attributesPicture = array_merge($this->pictureAttributes, $attributesPicture);
+
         $filename = $this->getUrl();
         $basename = pathinfo($filename, PATHINFO_FILENAME);
         $extension = $this->media->getExtension();
@@ -143,6 +146,10 @@ class Media
             if ($title != '') {
                 $attributesImage['title'] = htmlspecialchars($title);
             }
+        }
+
+        if (!\rex::isBackend() && !isset($attributesImage['width'])) {
+            $attributesImage['width'] = '100%';
         }
 
         $srcSet = [];
@@ -256,6 +263,11 @@ class Media
         }
         $this->pictureSources[] = ['media' => $media, 'sizes' => $sizes, 'mediaType' => $mediaType];
         return $this;
+    }
+
+    public function setPictureAttributes($attributes)
+    {
+        $this->pictureAttributes = array_merge($this->pictureAttributes, $attributes);
     }
 
 
