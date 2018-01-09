@@ -43,6 +43,9 @@ class Arr
      */
     public static function moveAfterKey(array $array, $afterKey, $moveKey)
     {
+        if (!isset($array[$afterKey])) {
+            return $array;
+        }
         if (!isset($array[$moveKey])) {
             return $array;
         }
