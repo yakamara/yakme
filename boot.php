@@ -47,12 +47,8 @@ rex_extension::register('MEDIA_URL_REWRITE', function (rex_extension_point $ep) 
 }, rex_extension::EARLY);
 
 
-
-// Spezielle YForm-Values auf Verknüpfungen prüfen, sobald Medien, Katgorien oder Artikel gelöscht werden.
 \rex_extension::register('MEDIA_IS_IN_USE', '\Yakme\Extension\YForm::isMediaInUse');
 \rex_extension::register('PACKAGES_INCLUDED', '\Yakme\Extension\YForm::isArticleInUse');
-
-
 
 // Html Section
 // - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -87,7 +83,7 @@ if (\rex::isBackend()) {
     \rex_view::addCssFile($this->getAssetsUrl('modules/tabbed.css'));
     \rex_view::addJsFile($this->getAssetsUrl('modules/tabbed.js'));
 
-    if (\rex_be_controller::getCurrentPage() == 'content/edit') {
+    if (\rex_be_controller::getCurrentPagePart(1) == 'content') {
         \rex_view::addCssFile($this->getAssetsUrl('css/meta-info.css'));
         \rex_extension::register('OUTPUT_FILTER', function(\rex_extension_point $ep) {
             $article = \rex_article::get(rex_request('article_id', 'int'));
@@ -169,7 +165,7 @@ if (\rex::isBackend() && \rex::getUser() && \rex::getUser()->isAdmin() && \rex_p
                     '[translate:navigation_low_addons]'
                 ], [
                     \rex_i18n::msg('navigation_addons'),
-                    \rex_i18n::msg('navigation_addons') . ' (Resterampe)'
+                    \rex_i18n::msg('navigation_addons') . ' (Andere)'
                 ]
                 ,
                 $ep->getSubject()
