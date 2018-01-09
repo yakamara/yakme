@@ -20,7 +20,6 @@ class rex_effect_responsive extends rex_effect_abstract
         $file = rex_media_manager::getMediaFile();
         $data = self::split($file);
         $this->media->setMediaPath(rex_path::media($data['file']));
-        $this->media->setMediaFilename($file);
         $this->media->setFormat($data['format']);
     }
 
