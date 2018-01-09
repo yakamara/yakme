@@ -3,6 +3,11 @@
     display: none;
 }
 
+[data-structure-level="0"] .rex-main-sidebar [data-show-level="0"],
+[data-structure-level="0"] .rex-main-sidebar [data-show-level="0"] ~ * {
+    display: block;
+}
+
 [data-structure-level="1"] .rex-main-sidebar [data-show-level="1"],
 [data-structure-level="1"] .rex-main-sidebar [data-show-level="1"] ~ * {
     display: block;
