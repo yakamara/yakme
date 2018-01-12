@@ -22,7 +22,12 @@ class YForm
             $article = \rex_article::get($id);
             if ($article) {
                 $sql = \rex_sql::factory();
-                $fields = $sql->getArray('SELECT `table_name`, `name`, `multiple` FROM `' . \rex_yform_manager_field::table() . '` WHERE `type_id`="value" AND `type_name` IN("be_link","be_select_category")');
+                $sql->setQuery('SELECT * FROM `' . \rex_yform_manager_field::table() . '`');
+
+                $columns = $sql->getFieldnames();
+                $select = in_array('multiple', $columns) ? ', `multiple`' : '';
+
+                $fields = $sql->getArray('SELECT `table_name`, `name`' . $select . ' FROM `' . \rex_yform_manager_field::table() . '` WHERE `type_id`="value" AND `type_name` IN("be_link","be_select_category")');
                 $fields = \rex_extension::registerPoint(new \rex_extension_point('YFORM_ARTICLE_IS_IN_USE', $fields));
 
                 if (count($fields)) {
@@ -31,7 +36,7 @@ class YForm
                         $tableName = $field['table_name'];
                         $condition = $sql->escapeIdentifier($field['name']) . ' = ' . $article->getId();
 
-                        if ($field['multiple'] == 1) {
+                        if (isset($field['multiple']) && $field['multiple'] == 1) {
                             $condition = 'FIND_IN_SET(' . $article->getId() . ', ' . $sql->escapeIdentifier($field['name'])  . ')';
                         }
                         $tables[$tableName][] = $condition;
@@ -78,7 +83,12 @@ class YForm
         $warning = $ep->getSubject();
 
         $sql = \rex_sql::factory();
-        $fields = $sql->getArray('SELECT `table_name`, `name`, `multiple` FROM `' . \rex_yform_manager_field::table() . '` WHERE `type_id`="value" AND `type_name` IN("be_media","mediafile")');
+        $sql->setQuery('SELECT * FROM `' . \rex_yform_manager_field::table() . '`');
+
+        $columns = $sql->getFieldnames();
+        $select = in_array('multiple', $columns) ? ', `multiple`' : '';
+
+        $fields = $sql->getArray('SELECT `table_name`, `name`' . $select . ' FROM `' . \rex_yform_manager_field::table() . '` WHERE `type_id`="value" AND `type_name` IN("be_media","mediafile")');
         $fields = \rex_extension::registerPoint(new \rex_extension_point('YFORM_MEDIA_IS_IN_USE', $fields));
 
         if (!count($fields)) {
@@ -91,7 +101,7 @@ class YForm
             $tableName = $field['table_name'];
             $condition = $sql->escapeIdentifier($field['name']) . ' = ' . $escapedFilename;
 
-            if ($field['multiple'] == 1) {
+            if (isset($field['multiple']) && $field['multiple'] == 1) {
                 $condition = 'FIND_IN_SET(' . $escapedFilename . ', ' . $sql->escapeIdentifier($field['name'])  . ')';
             }
             $tables[$tableName][] = $condition;
