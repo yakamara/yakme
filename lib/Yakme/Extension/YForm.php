@@ -22,7 +22,7 @@ class YForm
             $article = \rex_article::get($id);
             if ($article) {
                 $sql = \rex_sql::factory();
-                $sql->setQuery('SELECT * FROM `' . \rex_yform_manager_field::table() . '`');
+                $sql->setQuery('SELECT * FROM `' . \rex_yform_manager_field::table() . '` LIMIT 0');
 
                 $columns = $sql->getFieldnames();
                 $select = in_array('multiple', $columns) ? ', `multiple`' : '';
@@ -83,7 +83,7 @@ class YForm
         $warning = $ep->getSubject();
 
         $sql = \rex_sql::factory();
-        $sql->setQuery('SELECT * FROM `' . \rex_yform_manager_field::table() . '`');
+        $sql->setQuery('SELECT * FROM `' . \rex_yform_manager_field::table() . '` LIMIT 0');
 
         $columns = $sql->getFieldnames();
         $select = in_array('multiple', $columns) ? ', `multiple`' : '';
