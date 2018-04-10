@@ -104,24 +104,10 @@ if (\rex::isBackend()) {
 // YDeploy
 // - - - - - - - - - - - - - - - - - - - - - - - - - -
 if (\rex::isBackend() && \rex_addon::get('ydeploy')->isAvailable()) {
-    \rex_view::addCssFile($this->getAssetsUrl('css/ydeploy.css'));
-    if (\rex_addon::get('project')->getConfig('env') == 'production') {
-        \rex_view::addCssFile($this->getAssetsUrl('css/ydeploy-production.css'));
-    } else {
-        \rex_view::addCssFile($this->getAssetsUrl('css/ydeploy-development.css'));
-    }
-
-    rex_extension::register('OUTPUT_FILTER', function(rex_extension_point $ep) {
+    rex_extension::register('YDEPLOY_BADGE', function(rex_extension_point $ep) {
         $project = \rex_addon::get('project');
-        $env = $project->getConfig('env') == 'production' ? 'Production' : 'Development';
-        $version = isset($project->getProperty('app')['version']) ? ' - <small>Version ' . $project->getProperty('app')['version'] : '';
-        $ep->setSubject(
-            str_replace(
-                '</body>',
-                '<div class="ydeploy-badge">' . $env . $version . '</small></div></body>',
-                $ep->getSubject()
-            )
-        );
+        $version = isset($project->getProperty('app')['version']) ? ' - <small>Version ' . $project->getProperty('app')['version'] . '</small>' : '';
+        $ep->setSubject($ep->getSubject() . $version);
     });
 }
 
