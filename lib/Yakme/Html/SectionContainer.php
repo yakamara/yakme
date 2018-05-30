@@ -10,7 +10,6 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Yakme\Html;
 
 class SectionContainer
@@ -19,12 +18,12 @@ class SectionContainer
     const HTML_INNER = 2;
     const HTML_APPEND = 3;
 
+    public static $isOpened = false;
+    public static $appendHtml = '';
+
     protected $attributes;
     protected $name;
     protected $html = [];
-
-    public static $isOpened = false;
-    public static $appendHtml = '';
 
     public function __construct($name)
     {
@@ -49,10 +48,10 @@ class SectionContainer
             static::$appendHtml = '';
         }
 
-        $this->attributes = 'data-section="' . $this->name . '" ' . $this->attributes;
+        $this->attributes = 'data-section="'.$this->name.'" '.$this->attributes;
 
         if (null === $this->attributes || strpos($this->attributes, 'class') === false) {
-            $this->attributes = 'class="content-section" ' . $this->attributes;
+            $this->attributes = 'class="content-section" '.$this->attributes;
         }
 
         $htmlAppend = '';
@@ -70,7 +69,7 @@ class SectionContainer
             }
         }
 
-        $html .= sprintf('<section%s>%s<div class="content-container">%s', ' ' . $this->attributes, $htmlPrepend, $htmlInner);
+        $html .= sprintf('<section%s>%s<div class="content-container">%s', ' '.$this->attributes, $htmlPrepend, $htmlInner);
 
         static::$appendHtml = $htmlAppend;
         static::$isOpened = true;

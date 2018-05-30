@@ -13,14 +13,13 @@ namespace Yakme;
 
 class Arr
 {
-
     /**
      * Insert a value or key/value pair after a specific key in an array.  If key doesn't exist, value is appended
      * to the end of the array.
      *
-     * @param array $array
+     * @param array  $array
      * @param string $afterKey
-     * @param array $insertArray
+     * @param array  $insertArray
      *
      * @return array
      */
@@ -35,7 +34,7 @@ class Arr
     /**
      * Move a value or key/value pair after a specific key in an array.
      *
-     * @param array $array
+     * @param array  $array
      * @param string $afterKey
      * @param string $moveKey
      *

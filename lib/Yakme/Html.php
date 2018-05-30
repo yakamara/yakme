@@ -22,9 +22,8 @@ class Html
      */
     public static function getDownloadButton($url, $label = '{{ download }}')
     {
-        return '<a class="button-download" href="' . $url . '"><i class="icon-download"></i>' . $label . '</a>';
+        return '<a class="button-download" href="'.$url.'"><i class="icon-download"></i>'.$label.'</a>';
     }
-
 
     /**
      * @param        $url
@@ -34,7 +33,7 @@ class Html
      */
     public static function getDownloadLink($url, $label = '{{ download }}')
     {
-        return '<a href="' . $url . '"><i class="icon-download"></i>' . $label . '</a>';
+        return '<a href="'.$url.'"><i class="icon-download"></i>'.$label.'</a>';
     }
 
     /**
@@ -50,9 +49,8 @@ class Html
             $label = $email;
         }
         $attributes = self::prepareAttributes($attributes, ['class' => 'email-link']);
-        return self::getLink('mailto:' . $email, $label, $attributes);
+        return self::getLink('mailto:'.$email, $label, $attributes);
     }
-
 
     public static function getLink($url, $label = null, array $attributes = [])
     {
@@ -76,12 +74,12 @@ class Html
             $label = $number;
         }
         $attributes = self::prepareAttributes($attributes, ['class' => 'phone-link']);
-        return self::getLink('tel:' . preg_replace('/[^0-9]+/', '', $number), $label, $attributes);
+        return self::getLink('tel:'.preg_replace('/[^0-9]+/', '', $number), $label, $attributes);
     }
 
     /**
      * @param string $url
-     * @param array $attributes
+     * @param array  $attributes
      *
      * @return string
      */
@@ -100,7 +98,7 @@ class Html
             $cleanUrl = substr($url, 8);
         }
         $attributes = self::prepareAttributes($attributes, ['class' => 'external-link']);
-        return self::getLink($scheme . $cleanUrl, $cleanUrl, $attributes);
+        return self::getLink($scheme.$cleanUrl, $cleanUrl, $attributes);
     }
 
     protected static function prepareAttributes($arrayA, $arrayB)

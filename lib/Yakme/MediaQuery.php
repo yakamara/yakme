@@ -36,20 +36,19 @@ class MediaQuery
             if (is_numeric($until)) {
                 $maxWidth = self::px2em($until);
             } else {
-                $maxWidth = (int)(substr(self::px2em(self::getBreakpointWidth($until)), 0, -2)) - 0.01 . 'em';
+                $maxWidth = (int) (substr(self::px2em(self::getBreakpointWidth($until)), 0, -2)) - 0.01.'em';
             }
         }
 
         if ($minWidth != 0) {
-            $mediaQuery = $mediaQuery . ' and (min-width: ' . $minWidth . ')';
+            $mediaQuery = $mediaQuery.' and (min-width: '.$minWidth.')';
         }
         if ($maxWidth != 0) {
-            $mediaQuery = $mediaQuery . ' and (max-width: ' . $maxWidth . ')';
+            $mediaQuery = $mediaQuery.' and (max-width: '.$maxWidth.')';
         }
         if ($and) {
-            $mediaQuery = $mediaQuery . ' and ' . $and;
+            $mediaQuery = $mediaQuery.' and '.$and;
         }
-
 
         // Remove unnecessary media query prefix 'all and '
         if ($mediaType == 'all' and $mediaQuery != '') {
@@ -57,7 +56,7 @@ class MediaQuery
             $mediaQuery = substr($mediaQuery, 5);
         }
 
-        return trim($mediaType . ' ' . $mediaQuery);
+        return trim($mediaType.' '.$mediaQuery);
     }
 
     protected static function px2em($px, $baseFontSize = '16px')
@@ -68,11 +67,11 @@ class MediaQuery
                 return $px;
                 break;
             case 'px':
-                return (int)substr($px, 0, -2) / (int)substr($baseFontSize, 0, -2) . 'em';
+                return (int) substr($px, 0, -2) / (int) substr($baseFontSize, 0, -2).'em';
                 break;
         }
 
-        return self::px2em((int)$px . 'px');
+        return self::px2em((int) $px.'px');
     }
 
     protected static function getBreakpointWidth($name)

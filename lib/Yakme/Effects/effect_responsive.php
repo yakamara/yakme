@@ -23,12 +23,10 @@ class rex_effect_responsive extends rex_effect_abstract
         $this->media->setFormat($data['format']);
     }
 
-
     public function getName()
     {
         return rex_i18n::msg('yakme_media_manager_effect_responsive');
     }
-
 
     public static function handle(\rex_extension_point $ep)
     {
@@ -42,8 +40,8 @@ class rex_effect_responsive extends rex_effect_abstract
 
         foreach ($effects as $index => $effect) {
             if (isset($effect['params']['width'])) {
-                if (isset($effect['params']['height']) && (int)$effect['params']['height'] > 0) {
-                    $effect['params']['height'] = ceil((int)$effect['params']['height'] * $data['size'] / (int)$effect['params']['width']);
+                if (isset($effect['params']['height']) && (int) $effect['params']['height'] > 0) {
+                    $effect['params']['height'] = ceil((int) $effect['params']['height'] * $data['size'] / (int) $effect['params']['width']);
                 }
                 $effect['params']['width'] = $data['size'];
             }
@@ -60,16 +58,15 @@ class rex_effect_responsive extends rex_effect_abstract
         self::$sizes = $sizes;
     }
 
-
     public static function split($filename)
     {
         $file = $filename;
         $size = null;
 
         $position = strpos($filename, self::SEPARATOR);
-        if(false !== $position) {
+        if (false !== $position) {
             $file = substr($filename, 0, $position);
-            $size = (int)substr($filename, $position + strlen(self::SEPARATOR));
+            $size = (int) substr($filename, $position + strlen(self::SEPARATOR));
             $format = pathinfo($file, PATHINFO_EXTENSION);
             if (!in_array($size, self::$sizes)) {
                 $size = null;

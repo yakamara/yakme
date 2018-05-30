@@ -10,7 +10,6 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Yakme;
 
 class Icon
@@ -31,18 +30,18 @@ class Icon
         }
 
         if (count($classes) >= 1 && $prefix != '') {
-            $class .= ' ' . trim($prefix . implode(' ' . $prefix, $classes));
+            $class .= ' '.trim($prefix.implode(' '.$prefix, $classes));
         } elseif (count($classes) >= 1) {
-            $class .= ' ' . trim(implode(' ', $classes));
+            $class .= ' '.trim(implode(' ', $classes));
         }
 
-        $id = $prefix . $id;
+        $id = $prefix.$id;
         // $class = trim('icon icon-' . $class);
         return Svg::get($id, null, $class);
     }
 
     public static function circle($id, $classes = '', $prefix = 'icon')
     {
-        return '<span class="icon-circle-box">' . self::get($id, $classes, $prefix) . '</span>';
+        return '<span class="icon-circle-box">'.self::get($id, $classes, $prefix).'</span>';
     }
 }

@@ -1,21 +1,21 @@
 <?php
+
 namespace Yakme;
 
 class Download
 {
-    public
-        $path,
-        $filename;
+    public $path;
+    public $filename;
 
     public function __construct($filename, $dir = '')
     {
         $filename = basename($filename);
         $this->path = null;
-        if (file_exists($dir . $filename)) {
-            $this->path = $dir . $filename;
+        if (file_exists($dir.$filename)) {
+            $this->path = $dir.$filename;
         } else {
             $media = \rex_media::get($filename);
-            if($media) {
+            if ($media) {
                 $this->path = \rex_path::media($media->getFileName());
             }
         }
@@ -29,21 +29,21 @@ class Download
         \rex_response::cleanOutputBuffers();
 
         if (!file_exists($this->path)) {
-            header('HTTP/1.1 ' . \rex_response::HTTP_NOT_FOUND);
+            header('HTTP/1.1 '.\rex_response::HTTP_NOT_FOUND);
             exit;
         }
 
         \rex_response::sendContentType('application/octet-stream');
-        header('Content-Disposition: attachment; filename="' . $this->filename . '"');
+        header('Content-Disposition: attachment; filename="'.$this->filename.'"');
 
         \rex_response::sendLastModified(filemtime($this->path));
 
-        header('HTTP/1.1 ' . \rex_response::HTTP_OK);
+        header('HTTP/1.1 '.\rex_response::HTTP_OK);
         \rex_response::sendCacheControl('max-age=3600, must-revalidate, proxy-revalidate, private');
 
         // content length schicken, damit der browser einen ladebalken anzeigen kann
         if (!ini_get('zlib.output_compression')) {
-            header('Content-Length: ' . filesize($this->path));
+            header('Content-Length: '.filesize($this->path));
         }
 
         readfile($this->path);

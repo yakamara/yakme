@@ -10,7 +10,6 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Yakme\Html;
 
 class Section
@@ -44,7 +43,6 @@ class Section
                 foreach ($options as $option) {
                     $optionPair = explode('::=>::', $option);
                     $this->options[$optionPair[0]] = json_decode($optionPair[1]);
-
                 }
             }
         }
@@ -90,7 +88,7 @@ class Section
     public static function parse($content)
     {
         // preg_match_all('@(?<placeholder_with_tags>' . preg_quote(self::OPEN_TAG) . '\s*(?<placeholder>' . self::PREFIX . '(?<name>[A-Z]+)(\|(?<option>[a-zA-Z]+)\((?<arguments>.*?)\))?)\s*' . preg_quote(self::CLOSE_TAG) . ')@', $content, $matches, PREG_SET_ORDER);
-        preg_match_all('@(?<placeholder_with_tags>' . preg_quote(self::OPEN_TAG) . '\s*(?<placeholder>' . self::PREFIX . '(?<name>[A-Z]+)(\|options\((?<options>.*?)\))?\|[0-9]{6})\s*' . preg_quote(self::CLOSE_TAG) . ')@', $content, $matches, PREG_SET_ORDER);
+        preg_match_all('@(?<placeholder_with_tags>'.preg_quote(self::OPEN_TAG).'\s*(?<placeholder>'.self::PREFIX.'(?<name>[A-Z]+)(\|options\((?<options>.*?)\))?\|[0-9]{6})\s*'.preg_quote(self::CLOSE_TAG).')@', $content, $matches, PREG_SET_ORDER);
         if (count($matches)) {
             $instances = [];
             foreach ($matches as $match) {

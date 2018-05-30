@@ -13,21 +13,11 @@ namespace Yakme;
 
 class Sort
 {
-
-    protected static function execute($array, $function, $order = 'ASC')
-    {
-        usort($array, $function);
-        if (strtoupper($order) == 'DESC') {
-            $array = array_reverse($array);
-        }
-        return $array;
-    }
-
     /**
-     * @param string $field     Object property, Array key, Callable method
-     * @param array  $array     Array to sort
-     * @param string $order     The order of the sort ASC | DESC
-     * @param string $compare   Function to compare
+     * @param string $field   Object property, Array key, Callable method
+     * @param array  $array   Array to sort
+     * @param string $order   The order of the sort ASC | DESC
+     * @param string $compare Function to compare
      *
      * @return array
      */
@@ -38,7 +28,7 @@ class Sort
             $method = true;
             $field = substr($field, 0, (strlen($field) - 2));
         }
-        $function = function($a, $b) use ($field, $compare, $method) {
+        $function = function ($a, $b) use ($field, $compare, $method) {
             $a = (is_object($a)) ? ((!$method && $a instanceof \rex_structure_element) ? $a->getValue($field) : ($method ? $a->{$field}() : $a->$field)) : $a[$field];
             $b = (is_object($b)) ? ((!$method && $b instanceof \rex_structure_element) ? $b->getValue($field) : ($method ? $b->{$field}() : $b->$field)) : $b[$field];
 
@@ -69,5 +59,14 @@ class Sort
     public static function byUpdateDate($array, $order = 'ASC')
     {
         return self::by('updatedate', $array, $order);
+    }
+
+    protected static function execute($array, $function, $order = 'ASC')
+    {
+        usort($array, $function);
+        if (strtoupper($order) == 'DESC') {
+            $array = array_reverse($array);
+        }
+        return $array;
     }
 }

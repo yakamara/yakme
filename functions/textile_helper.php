@@ -23,12 +23,12 @@ function rex_texile_helper()
         <div class="panel panel-default">
             <div class="panel-heading" role="tab">
                 <h4 class="panel-title">
-                    <a role="button" data-toggle="collapse" data-parent="#textile-helper-accordion" href="#textile-helper-' . $id . '">
-                        ' . htmlspecialchars($label) . '
+                    <a role="button" data-toggle="collapse" data-parent="#textile-helper-accordion" href="#textile-helper-'.$id.'">
+                        '.htmlspecialchars($label).'
                     </a>
                 </h4>
             </div>
-            <div class="panel-collapse collapse" id="textile-helper-' . $id . '">
+            <div class="panel-collapse collapse" id="textile-helper-'.$id.'">
                 <table class="table">
                     <thead>
                         <tr>
@@ -56,8 +56,8 @@ function rex_texile_helper()
 
                 echo '
                     <tr>
-                        <td>' . nl2br(htmlspecialchars($desc)) . '</td>
-                        <td>' . $code . '</td>
+                        <td>'.nl2br(htmlspecialchars($desc)).'</td>
+                        <td>'.$code.'</td>
                     </tr>';
             }
         }

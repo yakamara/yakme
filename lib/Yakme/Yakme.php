@@ -4,7 +4,6 @@ namespace Yakme;
 
 class Yakme
 {
-
     public static function elixir($file, $media = 'all')
     {
         $path = \rex_path::frontend(\rex_path::absolute($file));
@@ -19,14 +18,14 @@ class Yakme
             return '';
         }
 
-        $file = \rex_url::frontend($file). '?v='. filemtime($path);
+        $file = \rex_url::frontend($file).'?v='.filemtime($path);
         switch ($extension) {
             case 'css':
-                return '<link rel="stylesheet" type="text/css" media="' . $media . '" href="' . $file .'" />';
+                return '<link rel="stylesheet" type="text/css" media="'.$media.'" href="'.$file.'" />';
             case 'js':
-                return '<script type="text/javascript" src="' . $file .'"></script>';
+                return '<script type="text/javascript" src="'.$file.'"></script>';
             case 'svg':
-                return '<div id="svg-symbols" style="display: none;">' . \rex_file::get($path) . '</div>';
+                return '<div id="svg-symbols" style="display: none;">'.\rex_file::get($path).'</div>';
         }
 
         return '';
@@ -36,8 +35,6 @@ class Yakme
     {
         return \rex_addon::get('project')->i18n($value);
     }
-
-
 
     /* Convert markup to html
      *
@@ -68,21 +65,19 @@ class Yakme
         switch ($parser) {
             case 'textile':
                 if (\rex_addon::get('markitup')->isAvailable()) {
-                    return $prefix . \markitup::parseOutput('textile', $markup) . $suffix;
+                    return $prefix.\markitup::parseOutput('textile', $markup).$suffix;
                 }
-                return $prefix . \rex_textile::parse($markup) . $suffix;
+                return $prefix.\rex_textile::parse($markup).$suffix;
             case 'markdown':
-                return $prefix . (new \ParsedownExtra)->text($markup) . $suffix;
+                return $prefix.(new \ParsedownExtra())->text($markup).$suffix;
         }
-
     }
 
-
-
     /**
-     * Avoid widows in a string
+     * Avoid widows in a string.
      *
      * @param string $string
+     *
      * @return string
      */
     public static function widont($string)
@@ -91,7 +86,7 @@ class Yakme
         $string = rtrim($string);
         $space = strrpos($string, ' ');
         if ($space !== false) {
-            $string = substr($string, 0, $space) . '&#160;' . substr($string, $space + 1);
+            $string = substr($string, 0, $space).'&#160;'.substr($string, $space + 1);
         }
         return $string;
     }

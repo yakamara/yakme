@@ -34,11 +34,10 @@ class Tabbed
     private $prependTabs = [];
     private $appendTabs = [];
 
-
     /**
      * Constructor.
      *
-     * @param array  $values
+     * @param array $values
      */
     public function __construct($values = [])
     {
@@ -46,7 +45,7 @@ class Tabbed
     }
 
     /**
-     * add a prepend tab
+     * add a prepend tab.
      *
      * @param string $label
      * @param string $id
@@ -57,7 +56,7 @@ class Tabbed
     }
 
     /**
-     * add a prepend tab
+     * add a prepend tab.
      *
      * @param string $label
      * @param string $id
@@ -68,7 +67,7 @@ class Tabbed
     }
 
     /**
-     * Set form
+     * Set form.
      *
      * @param string $form
      */
@@ -78,10 +77,10 @@ class Tabbed
     }
 
     /**
-     * Set sortable tabs
+     * Set sortable tabs.
      *
-     * @param string $orderName     REX_INPUT_VALUE[n]
-     * @param string $orderValue    REX_VALUE[n]
+     * @param string $orderName  REX_INPUT_VALUE[n]
+     * @param string $orderValue REX_VALUE[n]
      */
     public function setSortableTabs($orderName, $orderValue)
     {
@@ -90,11 +89,11 @@ class Tabbed
     }
 
     /**
-     * Set grid
+     * Set grid.
      *
-     * @param string $gridName     REX_INPUT_VALUE[n]
-     * @param string $gridValue    REX_VALUE[n]
-     * @param array $gridOptions   see static $gridOptions
+     * @param string $gridName    REX_INPUT_VALUE[n]
+     * @param string $gridValue   REX_VALUE[n]
+     * @param array  $gridOptions see static $gridOptions
      */
     public function setGrid($gridName, $gridValue, $gridOptions = [])
     {
@@ -107,7 +106,7 @@ class Tabbed
     }
 
     /**
-     * Set values
+     * Set values.
      *
      * @param array $values
      */
@@ -117,49 +116,47 @@ class Tabbed
     }
 
     /**
-     * Returns the tabs
-     *
+     * Returns the tabs.
      */
     public function getTabs()
     {
         $tabs = '';
         if (count($this->prependTabs)) {
             foreach ($this->prependTabs as $label => $id) {
-                $tabs .= '<li class="yakme-tabbed-locked pull-left"><a href="#' . $id . '" data-toggle="tab"><i>' . $label{1} . '</i><span>' . $label . '</span></a></li>';
+                $tabs .= '<li class="yakme-tabbed-locked pull-left"><a href="#'.$id.'" data-toggle="tab"><i>'.$label[1].'</i><span>'.$label.'</span></a></li>';
             }
         }
-        if($this->order['value'] != '') {
+        if ($this->order['value'] != '') {
             $order = explode(',', $this->order['value']);
-            for ($i = 1; $i <= count($this->values); $i++) {
-                $tabs .= '<li data-id="' . ($order[($i-1)]) . '" ><a id="tab-' . ($order[($i-1)]) . '" href="#tab-content-' . ($order[($i-1)]) . '" data-toggle="tab"><i>B' . $i . '</i><span>Bereich ' . ($order[($i-1)]) . '</span></a></li>';
+            for ($i = 1; $i <= count($this->values); ++$i) {
+                $tabs .= '<li data-id="'.($order[($i - 1)]).'" ><a id="tab-'.($order[($i - 1)]).'" href="#tab-content-'.($order[($i - 1)]).'" data-toggle="tab"><i>B'.$i.'</i><span>Bereich '.($order[($i - 1)]).'</span></a></li>';
             }
         } else {
-            for ($i = 1; $i <= count($this->values); $i++) {
-                $tabs .= '<li data-id="' . $i . '"><a id="tab-' . $i . '" href="#tab-content-' . $i . '" data-toggle="tab"><i>B' . $i . '</i><span>Bereich ' . $i . '</span></a></li>';
+            for ($i = 1; $i <= count($this->values); ++$i) {
+                $tabs .= '<li data-id="'.$i.'"><a id="tab-'.$i.'" href="#tab-content-'.$i.'" data-toggle="tab"><i>B'.$i.'</i><span>Bereich '.$i.'</span></a></li>';
             }
         }
         if (count($this->appendTabs)) {
             foreach ($this->appendTabs as $label => $id) {
-                $tabs .= '<li class="yakme-tabbed-locked"><a href="#' . $id . '" data-toggle="tab"><i>' . $label{1} . '</i><span>' . $label . '</span></a></li>';
+                $tabs .= '<li class="yakme-tabbed-locked"><a href="#'.$id.'" data-toggle="tab"><i>'.$label[1].'</i><span>'.$label.'</span></a></li>';
             }
         }
 
-        $orderInput = (count($this->order) == 2) ? '<input class="yakme-tabbed-order" type="hidden" name="' . $this->order['name'] . '" value="' . $this->order['value'] . '" />' : '';
+        $orderInput = (count($this->order) == 2) ? '<input class="yakme-tabbed-order" type="hidden" name="'.$this->order['name'].'" value="'.$this->order['value'].'" />' : '';
         $gridTab = (count($this->grid) == 2) ? '<li class="yakme-tabbed-locked pull-right"><a id="yakme-tabbed-settings" href="#tab-content-settings" data-toggle="tab"><i class="rex-icon rex-icon-metafuncs"></i><span>Einstellungen</span></a></li>' : '';
 
         return '
-        ' . $orderInput . '
+        '.$orderInput.'
         <div class="nav rex-page-nav" id="yakme-tabbed-tabs">
             <ul class="nav nav-tabs">
-                ' . $tabs . '
-                ' . $gridTab . '
+                '.$tabs.'
+                '.$gridTab.'
             </ul>
         </div>';
     }
 
     /**
-     * Returns the grid
-     *
+     * Returns the grid.
      */
     public function getGrid()
     {
@@ -178,8 +175,8 @@ class Tabbed
             foreach (self::$gridOptions as $value) {
                 $checked = $this->grid['value'] == $value ? ' checked="checked"' : '';
                 $grid .= '
-                    <label class="yakme-tabbed-grid-item" data-yakme-tabbed-grid="' . $value . '">
-                        <input name="' . $this->grid['name'] . '" value="' . $value . '" type="radio"' . $checked . ' />
+                    <label class="yakme-tabbed-grid-item" data-yakme-tabbed-grid="'.$value.'">
+                        <input name="'.$this->grid['name'].'" value="'.$value.'" type="radio"'.$checked.' />
                         <span class="yakme-tabbed-grid-item-view"></span>
                     </label>';
             }
@@ -188,11 +185,11 @@ class Tabbed
                     <div id="tab-content-settings" class="tab-pane fade in">
                         <fieldset class="form-horizontal">
                             <legend>Raster</legend>
-                            <input class="yakme-tabbed-grid-value" type="hidden" value="' . $this->grid['value'] . '" />
+                            <input class="yakme-tabbed-grid-value" type="hidden" value="'.$this->grid['value'].'" />
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">Auswahl</label>
                                 <div class="col-sm-10 yakme-tabbed-grid">
-                                    ' . $grid . '
+                                    '.$grid.'
                                 </div>
                             </div>
                         </fieldset>
@@ -203,8 +200,7 @@ class Tabbed
     }
 
     /**
-     * Returns the javscript and stylesheet files
-     *
+     * Returns the javscript and stylesheet files.
      */
     public function getFiles()
     {
@@ -217,27 +213,28 @@ class Tabbed
      * Returns the sorted values and clears values which do not match the grid.
      *
      * @param array  $values
-     * @param string $orderValue    REX_VALUE[n], same REX_VALUE setSortableTabs
-     * @param string $gridValue     REX_VALUE[n], same REX_VALUE setGrid
+     * @param string $orderValue REX_VALUE[n], same REX_VALUE setSortableTabs
+     * @param string $gridValue  REX_VALUE[n], same REX_VALUE setGrid
+     *
      * @return array
      */
     public static function getValuesForOutput($values, $orderValue = null, $gridValue = null)
     {
         // Values sortieren
         $order = array_keys($values);
-        if (!is_null($orderValue) && $orderValue != '') {
+        if (null !== $orderValue && $orderValue != '') {
             $order = explode(',', $orderValue);
         }
         $ordered = [];
-        foreach($order as $key) {
-            if(array_key_exists($key, $values)) {
+        foreach ($order as $key) {
+            if (array_key_exists($key, $values)) {
                 $ordered[$key] = $values[$key];
                 unset($values[$key]);
             }
         }
         $values = $ordered;
 
-        if (!is_null($gridValue) && $gridValue != '') {
+        if (null !== $gridValue && $gridValue != '') {
             // nur Values verwenden, die dem Raster entsprechen
             $gridArr = explode('-', $gridValue);
             $values = array_slice($values, 0, count($gridArr));
@@ -245,7 +242,6 @@ class Tabbed
 
         return $values;
     }
-
 
     public function get()
     {
@@ -255,25 +251,25 @@ class Tabbed
         $return .= '<div class="tab-content">';
 
         foreach ($this->values as $i => $values) {
-            $search = array_map(function($key) {
-                    return '{{{ ' . $key . ' }}}';
-                }, array_keys($values)
+            $search = array_map(function ($key) {
+                return '{{{ '.$key.' }}}';
+            }, array_keys($values)
             );
             $replace = array_values($values);
             $form = $this->form;
             $form = str_replace($search, $replace, $form);
-            $form = preg_replace('@' . preg_quote('{{{') . '\s*NAME__(.*?)\s*' . preg_quote('}}}') . '@', 'REX_INPUT_VALUE[' . $i . '][$1]', $form);
-            $form = preg_replace('@' . preg_quote('{{{') . '\s*.*?\s*' . preg_quote('}}}') . '@', '', $form);
+            $form = preg_replace('@'.preg_quote('{{{').'\s*NAME__(.*?)\s*'.preg_quote('}}}').'@', 'REX_INPUT_VALUE['.$i.'][$1]', $form);
+            $form = preg_replace('@'.preg_quote('{{{').'\s*.*?\s*'.preg_quote('}}}').'@', '', $form);
 
             $return .= '
-                <div class="tab-pane fade in" id="tab-content-' . $i . '">
-                    ' . $form . '
+                <div class="tab-pane fade in" id="tab-content-'.$i.'">
+                    '.$form.'
                 </div>';
         }
         $return .= $this->getGrid();
         $return .= '</div>';
 
-        $return = '<div class="yakme-module yakme-tabbed-module">' . $return . '</div>';
+        $return = '<div class="yakme-module yakme-tabbed-module">'.$return.'</div>';
 
         return $return;
     }
