@@ -18,6 +18,10 @@ class Yakme
             return '';
         }
 
+        if ('css' == $extension && file_exists($path.'.map')) {
+            $path = $path.'.map';
+        }
+
         $file = \rex_url::frontend($file).'?v='.filemtime($path);
         switch ($extension) {
             case 'css':
