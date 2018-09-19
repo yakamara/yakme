@@ -23,6 +23,7 @@ class Yakme
         }
 
         $file = \rex_url::frontend($file).'?v='.filemtime($path);
+        // $file = \rex_url::frontend($file).'?v='.rand(100000,90000);
         switch ($extension) {
             case 'css':
                 return '<link rel="stylesheet" type="text/css" media="'.$media.'" href="'.$file.'" />';

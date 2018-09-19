@@ -12,6 +12,8 @@
 
 namespace Yakme\Module;
 
+use Yakme\Str;
+
 class Tabbed
 {
     private static $gridOptions = [
@@ -28,6 +30,8 @@ class Tabbed
 
     private $values;
     private $form;
+    private $mblock = false;
+    private $mblockOptions = [];
     private $order = [];
     private $grid = [];
 
@@ -74,6 +78,12 @@ class Tabbed
     public function setForm($form)
     {
         $this->form = $form;
+    }
+
+    public function setMBlock($value = true, array $options = [])
+    {
+        $this->mblock = $value;
+        $this->mblockOptions = $options;
     }
 
     /**
@@ -243,6 +253,37 @@ class Tabbed
         return $values;
     }
 
+    public static function manipulateValuesForOutput($values, $widgets = [])
+    {
+        foreach ($values as $tabIndex => $tabs) {
+            foreach ($tabs as $blockIndex => $blockElements) {
+                $element = $tabs[$blockIndex]['ELEMENT_SELECT'];
+                $values[$tabIndex][$blockIndex]['BLOCK_ELEMENT'] = $element;
+                foreach ($blockElements as $key => $value) {
+                    if ($key === 'ELEMENT_SELECT') {
+                        continue;
+                    }
+                    if ($key === 'BLOCK_DATA') {
+                        continue;
+                    }
+
+                    if (Str::startsWith($key, $element)) {
+                        $newKey = str_replace($element.'_', '', $key);
+                        $values[$tabIndex][$blockIndex]['BLOCK_DATA'][$newKey] = $value;
+                    }
+                }
+
+                if (isset($widgets[$element])) {
+                    foreach ($widgets[$element] as $widget) {
+                        $values[$tabIndex][$blockIndex]['BLOCK_DATA'][$widget] = $values[$tabIndex][$blockIndex][$widget];
+                    }
+                }
+            }
+        }
+
+        return $values;
+    }
+
     public function get()
     {
         $return = '';
@@ -251,15 +292,35 @@ class Tabbed
         $return .= '<div class="tab-content">';
 
         foreach ($this->values as $i => $values) {
-            $search = array_map(function ($key) {
-                return '{{{ '.$key.' }}}';
-            }, array_keys($values)
-            );
-            $replace = array_values($values);
+            $mblockId = '';
+
+            // $search = [];
+            // $replace = [];
+            // if ($this->mblock) {
+            //     $mblockId = '[0]';
+            //     $search = array_map(function ($key) {
+            //             return '{{{ '.$key.' }}}';
+            //         }, array_keys($values[0])
+            //     );
+            //     $replace = array_values($values[0]);
+            //     unset($values[0]);
+            // }
+            //
+            // $search = array_merge($search, array_map(function ($key) {
+            //         return '{{{ '.$key.' }}}';
+            //     }, array_keys($values)
+            // ));
+            // dump($values);
+            // $replace = array_merge($replace, array_values($values));
+
             $form = $this->form;
-            $form = str_replace($search, $replace, $form);
-            $form = preg_replace('@'.preg_quote('{{{').'\s*NAME__(.*?)\s*'.preg_quote('}}}').'@', 'REX_INPUT_VALUE['.$i.'][$1]', $form);
-            $form = preg_replace('@'.preg_quote('{{{').'\s*.*?\s*'.preg_quote('}}}').'@', '', $form);
+            $form = str_replace('{{{ ID }}}', $i, $form);
+            // $form = preg_replace('@'.preg_quote('{{{').'\s*NAME__(.*?)\s*'.preg_quote('}}}').'@', 'REX_INPUT_VALUE['.$i.']'.$mblockId.'[$1]', $form);
+            // $form = preg_replace('@'.preg_quote('{{{').'\s*.*?\s*'.preg_quote('}}}').'@', '', $form);
+
+            if ($this->mblock) {
+                $form = \MBlock::show($i, $form, $this->mblockOptions);
+            }
 
             $return .= '
                 <div class="tab-pane fade in" id="tab-content-'.$i.'">
