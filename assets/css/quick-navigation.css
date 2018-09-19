@@ -1,0 +1,117 @@
+.quicknavi-btn-group.transparent .btn-default {
+    background-color: #eef0f3;
+    border: 1px solid #dfe3e9;
+}
+.quicknavi-btn-group.transparent .btn-default b {
+    font-weight: 400;
+}
+.quicknavi-btn-group.transparent .btn-default:hover,
+.quicknavi-btn-group.transparent .btn-default:active,
+.quicknavi-btn-group.transparent .btn-default:focus,
+.quicknavi-btn-group.transparent .btn-group.open .dropdown-toggle {
+    background-color: #fff;
+    border-color: #dfe3e9;
+    box-shadow: none;
+}
+
+.quicknavi,
+#qsearch {
+    font-size: 13px;
+}
+
+.quicknavi.quickfiles li .quicknavi_left,
+.quicknavi.quickfiles li .quicknavi_right {
+    float: none;
+    margin: 0;
+    padding: 3px 10px;
+}
+.quicknavi.quickfiles li .quicknavi_left small {
+    padding-top: 3px;
+}
+.quicknavi.quickfiles li .quicknavi_right a {
+    display: inline-block;
+    margin: 0;
+    padding: 5px;
+    color: #9ca5b2;
+    text-align: center;
+}
+.quicknavi.quickfiles li .quicknavi_right a:hover {
+    background-color: #f3f6fb;
+    color: #4b9ad9;
+}
+.quicknavi.quickfiles li a:hover {
+    background-color: transparent;
+}
+
+.quicknavi {
+    padding-bottom: 0;
+}
+.quickfiles small,
+.quicknavi .rex-primary-id {
+    font-size: 85%;
+}
+.quickfiles,
+.quicknavi ul {
+    margin-bottom: 0;
+    padding: 0;
+}
+.quickfiles li:hover,
+.quicknavi ul li:hover {
+    background-color: #e0f5ee;
+}
+.quickfiles li,
+.quicknavi ul > li {
+    padding-top: 0.4em;
+    padding-bottom: 0.4em;
+    border-bottom: 1px solid #dfe3e9;
+    /*border-bottom: 1px solid #f3f6fb;*/
+}
+
+.quickfiles li {
+    display: flex;
+    align-items: center;
+}
+/* YForm Tabellen */
+.quicknavi-btn-group .btn-group:nth-child(3) .quickfiles li {
+    display: block;
+}
+.quicknavi-btn-group .btn-group:nth-child(3) .quickfiles li.quicknavi_left {
+    float: left;
+}
+.quicknavi-btn-group .btn-group:nth-child(3) .quickfiles li.quicknavi_right {
+    float: right;
+}
+
+.quicknavi li a {
+    width: auto;
+}
+.quicknavi ul li:hover a {
+    color: #2674b2;
+}
+.quicknavi .dropdown-header {
+    margin-bottom: 0;
+}
+.quicknavi .bg-primary .rex-primary-id {
+    color: #fff;
+}
+.quicknavi li.bg-primary:hover .rex-primary-id {
+    color: #777;
+}
+
+#qsearch {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    margin-top: -5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+    box-shadow: none;
+}
+
+#qsearch:focus {
+    background-color: #f3f6fb;
+    border-color: #c1c9d4;
+}

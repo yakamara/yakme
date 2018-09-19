@@ -76,6 +76,9 @@ if ($downloadFile != '') {
 }
 
 if (\rex::isBackend()) {
+    \rex_view::addCssFile($this->getAssetsUrl('css/quick-navigation.css'));
+    \rex_view::addCssFile($this->getAssetsUrl('css/redaxo.css'));
+    \rex_view::addCssFile($this->getAssetsUrl('css/yform.css'));
     \rex_view::addCssFile($this->getAssetsUrl('modules/tabbed.css'));
     \rex_view::addJsFile($this->getAssetsUrl('modules/tabbed.js'));
 
@@ -101,8 +104,13 @@ if (\rex::isBackend()) {
 // - - - - - - - - - - - - - - - - - - - - - - - - - -
 if (\rex::isBackend() && \rex_addon::get('ydeploy')->isAvailable()) {
     rex_extension::register('YDEPLOY_BADGE', function (rex_extension_point $ep) {
+        $ydeploy = rex_ydeploy::factory();
         $project = \rex_addon::get('project');
         $version = isset($project->getProperty('app')['version']) ? ' - <small>Version '.$project->getProperty('app')['version'].'</small>' : '';
+
+        if ($ydeploy->isDeployed()) {
+            $version .= ' - '.rex_formatter::strftime($ydeploy->getTimestamp()->getTimestamp(), 'datetime');
+        }
         $ep->setSubject($ep->getSubject().$version);
     });
 }
@@ -151,4 +159,21 @@ if (\rex::isBackend() && \rex::getUser() && \rex::getUser()->isAdmin() && \rex_p
             )
         );
     });
+
+    if (\rex_be_controller::getCurrentPage() == 'yform/manager/data_edit') {
+        \rex_extension::register('OUTPUT_FILTER', function (\rex_extension_point $ep) {
+
+            preg_match_all('@<th>.*?</th>@', $ep->getSubject(), $matches);
+            $search = [];
+            $replace = [];
+            // dump($matches);
+            if (count($matches)) {
+                foreach ($matches[0] as $match) {
+                    $search[] = $match;
+                    $replace[] = htmlspecialchars_decode($match);
+                }
+            }
+            $ep->setSubject(str_replace($search, $replace,$ep->getSubject()));
+        });
+    }
 }
