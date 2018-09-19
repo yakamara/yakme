@@ -211,6 +211,9 @@ class Media
     public function getCaption($field = 'med_caption')
     {
         $value = $this->media->getValue($field);
+        if (is_null($value)) {
+            $value = '';
+        }
         if ($value != '') {
             return trim($value);
         }
@@ -263,7 +266,11 @@ class Media
      */
     public function getCopyright($field = 'med_copyright')
     {
-        $value = trim($this->media->getValue($field));
+        $value = $this->media->getValue($field);
+        if (is_null($value)) {
+            $value = '';
+        }
+        $value = trim($value);
         if ($value != '') {
             return $value;
         }
@@ -677,7 +684,8 @@ class Media
         }
 
         $tmpPath = pathinfo($filename, PATHINFO_DIRNAME);
-        $filename = str_replace($this->getMediaType(), $this->getMediaType().'/400', $filename);
+        $filename = str_replace($this->getMediaType().'/', $this->getMediaType().'/400/', $filename);
+
         $sources = [];
         foreach ($srcSet as $size => $file) {
             $sources[] = $tmpPath.$file.' '.$size;
