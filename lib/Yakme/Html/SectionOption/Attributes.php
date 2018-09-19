@@ -30,6 +30,9 @@ class Attributes extends SectionOption
      */
     public function fire(SectionContainer $sectionContainer, $optionValue)
     {
+        if (is_string($optionValue)) {
+            $optionValue = \rex_string::split($optionValue);
+        }
         $sectionContainer->setAttributes($optionValue);
         return $sectionContainer;
     }

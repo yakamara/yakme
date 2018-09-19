@@ -19,7 +19,7 @@ class SectionCreator
 
     public function __construct($name)
     {
-        $this->name = $name;
+        $this->name = strtoupper(\rex_string::normalize($name));
     }
 
     public function addOption($optionName, $value)

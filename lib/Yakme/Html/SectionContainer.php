@@ -21,7 +21,7 @@ class SectionContainer
     public static $isOpened = false;
     public static $appendHtml = '';
 
-    protected $attributes;
+    protected $attributes = [];
     protected $name;
     protected $html = [];
 
@@ -32,7 +32,7 @@ class SectionContainer
 
     public function setAttributes($value)
     {
-        return $this->attributes = $value;
+        return $this->attributes += $value;
     }
 
     public function setHTML($value, $position = self::HTML_INNER)
@@ -48,10 +48,9 @@ class SectionContainer
             static::$appendHtml = '';
         }
 
-        $this->attributes = 'data-section="'.$this->name.'" '.$this->attributes;
-
-        if (null === $this->attributes || strpos($this->attributes, 'class') === false) {
-            $this->attributes = 'class="content-section" '.$this->attributes;
+        $this->attributes['data-section'] = $this->name;
+        if (!isset($this->attributes['class'])) {
+            $this->attributes['class'] = 'content-section';
         }
 
         $htmlAppend = '';
@@ -69,7 +68,7 @@ class SectionContainer
             }
         }
 
-        $html .= sprintf('<section%s>%s<div class="content-container">%s', ' '.$this->attributes, $htmlPrepend, $htmlInner);
+        $html .= sprintf('<section%s>%s<div class="content-container">%s', \rex_string::buildAttributes($this->attributes), $htmlPrepend, $htmlInner);
 
         static::$appendHtml = $htmlAppend;
         static::$isOpened = true;

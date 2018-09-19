@@ -25,7 +25,7 @@ abstract class SectionOption
      * Execute the option.
      *
      * @param SectionContainer $sectionContainer
-     * @param string           $arguments
+     * @param array|string     $arguments
      *
      * @return SectionContainer
      */
