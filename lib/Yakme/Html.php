@@ -78,6 +78,17 @@ class Html
     }
 
     /**
+     * @param \DateTime $datetime
+     * @param string    $format
+     *
+     * @return string
+     */
+    public static function getTimeTag(\DateTime $datetime, $format = '%d.%m.%Y')
+    {
+        return '<time datetime="'.$datetime->format('W3C').'">'.strftime($format, $datetime->getTimestamp()).'</time>';
+    }
+
+    /**
      * @param string $url
      * @param array  $attributes
      *
