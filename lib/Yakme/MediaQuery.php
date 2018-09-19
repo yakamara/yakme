@@ -74,7 +74,7 @@ class MediaQuery
         return self::px2em((int) $px.'px');
     }
 
-    protected static function getBreakpointWidth($name)
+    public static function getBreakpointWidth($name)
     {
         $breakpoints = \rex_addon::get('project')->getProperty('breakpoints');
         if (!isset($breakpoints[$name])) {
