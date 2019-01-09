@@ -16,6 +16,11 @@ class_alias('\Yakme\Yakme', 'Yakme');
 require_once __DIR__.'/lib/Yakme/helper.php';
 require_once __DIR__.'/functions/textile_helper.php';
 
+// Minibar explizit aktiv setzen. Wird ansonsten in Popups inaktiv gesetzt.
+rex_extension::register('PACKAGES_INCLUDED', function () {
+    rex_minibar::getInstance()->setActive(true);
+});
+
 if (!function_exists('trans')) {
     function trans($value)
     {
