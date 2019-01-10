@@ -83,7 +83,10 @@ class Media
             $value = $value ?: '';
             return $value;
         }
-        return $this->media->getTitle();
+
+        $value = $this->media->getTitle();
+        $value = $value ?: '';
+        return $value;
     }
 
     /**
