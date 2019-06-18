@@ -61,6 +61,7 @@ class rex_effect_responsive extends rex_effect_abstract
     public static function split($filename)
     {
         $file = $filename;
+        $format = null;
         $size = null;
 
         $position = strpos($filename, self::SEPARATOR);
