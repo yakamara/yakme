@@ -7,12 +7,6 @@
 use Yakme\Html\Section;
 use Yakme\Html\SectionOption;
 
-class_alias('\Yakme\Download', 'Download');
-class_alias('\Yakme\Media', 'Media');
-class_alias('\Yakme\MediaQuery', 'Mq');
-class_alias('\Yakme\Sort', 'Sort');
-class_alias('\Yakme\Yakme', 'Yakme');
-
 require_once __DIR__.'/lib/Yakme/helper.php';
 require_once __DIR__.'/functions/textile_helper.php';
 
