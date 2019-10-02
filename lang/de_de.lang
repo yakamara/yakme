@@ -13,3 +13,10 @@ yakme_media_manager_effect_responsive = :responsive images
 
 yform_structure_article_could_not_be_deleted = Artikel konnte nicht gelöscht werden. Dieser ist noch mit folgenden Datensätzen verknüpft.
 yform_structure_category_could_not_be_deleted = Kategorie konnte nicht gelöscht werden. Diese ist noch mit folgenden Datensätzen verknüpft.
+
+
+id = Id
+id_exists = Id existiert schon.
+media_manager_id = Id
+clang_error_startidcanotbedeleted = Startsprache (clang) mit der Id "{0}" kann nicht gelöscht werden
+clang_error_idcanotbedeleted = Sprache (clang) mit der Id "{0}" existiert nicht
