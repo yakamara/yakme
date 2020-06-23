@@ -51,8 +51,12 @@ $media = Media::get('REX_MEDIA[1]');
 if (!$media) {
     return false;
 }
+
+// Es wird initial ein Bild im 1:1 Format erscheinen
 $image = $media->setMediaType('1by1')
+    // Ab dem Breakpoint von xl, wird ein Bild im 16:9 Format erscheinen
     ->addPictureSource(MediaQuery::from('xl'), '100vw', '16by9')
+    // Ab dem Breakpoint von sm, wird ein Bild im 4:3 Format erscheinen
     ->addPictureSource(MediaQuery::from('sm'), '100vw', '4by3')
     ->usePicture()
     ->toFigure(['class' => ['media']]);
