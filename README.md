@@ -3,87 +3,107 @@ Yakme AddOn
 
 ## Responsive images
 
-### Beispiele
+### Voraussetzungen
 
-**Voraussetzungen für das Beispiel**
-
-`.htaccess` öffnen und ergännzen
+#### `.htaccess` öffnen und ergänzen
 
 ```
 # -yakme- = Separator for responsive images
 RewriteRule ^images/([^/]*)/([^/]*)/([^/]*) %{ENV:BASE}/index.php?rex_media_type=$1&rex_media_file=$3-yakme-$2&%{QUERY_STRING} [B]
 ```
 
+#### Breakpoints definieren
+
+Die `package.yml` des AddOns `project` öffnen und einfügen
+
+```
+breakpoints:
+    sm: 769px
+    md: 1024px
+    lg: 1216px
+    xl: 1408px
+    xxl: 1600px
+```
+
+> Achtung: Die obenstehenden Breakpoints sollten mit der Vorgabe aus dem Sass übereinstimmen.
 
 
-Folgende Mediatypen anlegen
+#### Folgende Mediatypen anlegen
 
 | Mediatyp | Effekte | Hinweise |
 | ------------- | ------------- | ------------- |
-| **header-16by9** _(16:9 Format)_ | :responsive&nbsp;images |  |
-|  | :focuspoint fit | Breite: 2400px; Höhe: 1350px;<br /> Zoom: Ausschnitt größtmöglich wählen (100%); Ausrichten an: Fokuspunkt des Bildes |
-| **header-4by3** _(4:3 Format)_ | :responsive&nbsp;images |  |
-| |  :focuspoint fit | Breite: 2400px; Höhe: 1800px;<br /> Zoom: Ausschnitt größtmöglich wählen (100%); Ausrichten an: Fokuspunkt des Bildes |
-| **header-1by1** _(1:1 Format - Quadrat)_ |  :responsive&nbsp;images |  |
-| | :focuspoint fit | Breite: 2400px; Höhe: 2400px<br /> Zoom: Ausschnitt größtmöglich wählen (100%); Ausrichten an: Fokuspunkt des Bildes |
+| **16by9** _(16:9 Format)_ | :responsive&nbsp;images |  |
+|  | :focuspoint fit | Breite: 2400px; Höhe: 1350px;<br /> Zoom-Faktor: 100% (Ausschnitt größtmöglich wählen) |
+| **4by3** _(4:3 Format)_ | :responsive&nbsp;images |  |
+| |  :focuspoint fit | Breite: 2400px; Höhe: 1800px;<br /> Zoom-Faktor: 100% (Ausschnitt größtmöglich wählen) |
+| **1by1** _(1:1 Format - Quadrat)_ |  :responsive&nbsp;images |  |
+| | :focuspoint fit | Breite: 2400px; Höhe: 2400px<br /> Zoom-Faktor: 100% (Ausschnitt größtmöglich wählen) |
 
+
+
+### Beispiele
 
 
 **Eingabe**
 
 ```php
-$media = Media::get(REX_MEDIA[1]);
-echo $media
-        ->setMediaType('header-1by1')
-        ->addPictureSource('(min-width: 1200px)', '50vw', 'header-16by9')
-        ->addPictureSource('(min-width: 992px)', '70vw', 'header-16by9')
-        ->addPictureSource('(min-width: 768px)', '80vw', 'header-4by3')
-        ->toPicture();
+$media = Media::get('REX_MEDIA[1]');
+if (!$media) {
+    return false;
+}
+$image = $media->setMediaType('1by1')
+    ->addPictureSource(MediaQuery::from('xl'), '100vw', '16by9')
+    ->addPictureSource(MediaQuery::from('sm'), '100vw', '4by3')
+    ->usePicture()
+    ->toFigure(['class' => ['media']]);
 ```
 
 **Ausgabe**
 
 ```html
-<picture>
-    <source media="(min-width: 1200px)" sizes="50vw"
-        srcset="/images/header-16by9/200/semperoper.jpg 200w,
-                /images/header-16by9/400/semperoper.jpg 400w,
-                /images/header-16by9/800/semperoper.jpg 800w,
-                /images/header-16by9/1200/semperoper.jpg 1200w,
-                /images/header-16by9/1600/semperoper.jpg 1600w,
-                /images/header-16by9/2000/semperoper.jpg 2000w">
-    <source media="(min-width: 992px)" sizes="70vw"
-        srcset="/images/header-16by9/200/semperoper.jpg 200w,
-                /images/header-16by9/400/semperoper.jpg 400w,
-                /images/header-16by9/800/semperoper.jpg 800w,
-                /images/header-16by9/1200/semperoper.jpg 1200w,
-                /images/header-16by9/1600/semperoper.jpg 1600w,
-                /images/header-16by9/2000/semperoper.jpg 2000w">
-    <source media="(min-width: 768px)" sizes="80vw"
-        srcset="/images/header-4by3/200/semperoper.jpg 200w,
-                /images/header-4by3/400/semperoper.jpg 400w,
-                /images/header-4by3/800/semperoper.jpg 800w,
-                /images/header-4by3/1200/semperoper.jpg 1200w,
-                /images/header-4by3/1600/semperoper.jpg 1600w,
-                /images/header-4by3/2000/semperoper.jpg 2000w">
-    <img src="/images/header-1by1/400/semperoper.jpg" alt="Semperoper" title="Semperoper"
-        srcset="/images/header-1by1/200/semperoper.jpg 200w,
-                /images/header-1by1/400/semperoper.jpg 400w,
-                /images/header-1by1/800/semperoper.jpg 800w,
-                /images/header-1by1/1200/semperoper.jpg 1200w,
-                /images/header-1by1/1600/semperoper.jpg 1600w,
-                /images/header-1by1/2000/semperoper.jpg 2000w">
-</picture>
+<figure class="media">
+    <picture>
+        <source media="(min-width: 1408px)" sizes="100vw" 
+            srcset="/images/21by9/200/stage.jpg 200w,
+                    /images/21by9/400/stage.jpg 400w,
+                    /images/21by9/800/stage.jpg 800w,
+                    /images/21by9/1200/stage.jpg 1200w,
+                    /images/21by9/1600/stage.jpg 1600w,
+                    /images/21by9/2000/stage.jpg 2000w,
+                    /images/21by9/2400/stage.jpg 2400w">
+        <source media="(min-width: 769px)" sizes="100vw" 
+            srcset="/images/2by1/200/stage.jpg 200w,
+                    /images/2by1/400/stage.jpg 400w,
+                    /images/2by1/800/stage.jpg 800w,
+                    /images/2by1/1200/stage.jpg 1200w,
+                    /images/2by1/1600/stage.jpg 1600w,
+                    /images/2by1/2000/stage.jpg 2000w,
+                    /images/2by1/2400/stage.jpg 2400w">
+        <img src="/images/3by2/400/stage.jpg" alt="Bühnenbild" title="Bühnenbild" width="100%" 
+            srcset="/images/3by2/200/stage.jpg 200w,
+                    /images/3by2/400/stage.jpg 400w,
+                    /images/3by2/800/stage.jpg 800w,
+                    /images/3by2/1200/stage.jpg 1200w,
+                    /images/3by2/1600/stage.jpg 1600w,
+                    /images/3by2/2000/stage.jpg 2000w,
+                    /images/3by2/2400/stage.jpg 2400w" sizes="">
+    </picture>
+</figure>
 ```
 
 **Ausgabe der Bilder**
 
 | Datei| Bildgröße in px | Verhältnis |
 | ------------- | ------------- | ------------- |
-| /images/`header-1by1/400`/semperoper.jpg 400w | 400 x 400 | 1:1 |
-| /images/`header-4by3/800`/semperoper.jpg 800w | 800 x 600 | 4:3 |
-| /images/`header-16by9/1200`/semperoper.jpg 1200w | 1200 x 675 | 16:9 |
+| /images/`1by1/400`/stage.jpg 400w | 400 x 400 | 1:1 |
+| /images/`4by3/800`/stage.jpg 800w | 800 x 600 | 4:3 |
+| /images/`16by9/1200`/stage.jpg 1200w | 1200 x 675 | 16:9 |
 
+
+
+
+
+## VERALTET
 
 
 ## Content Sections
