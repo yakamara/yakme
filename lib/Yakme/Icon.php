@@ -36,7 +36,7 @@ class Icon
         }
 
         $id = $prefix.$id;
-        // $class = trim('icon icon-' . $class);
+        $class .= ' '.$id;
         return Svg::get($id, null, $class);
     }
 
