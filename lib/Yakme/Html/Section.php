@@ -88,7 +88,7 @@ class Section
     public static function parse($content)
     {
         // preg_match_all('@(?<placeholder_with_tags>' . preg_quote(self::OPEN_TAG) . '\s*(?<placeholder>' . self::PREFIX . '(?<name>[A-Z]+)(\|(?<option>[a-zA-Z]+)\((?<arguments>.*?)\))?)\s*' . preg_quote(self::CLOSE_TAG) . ')@', $content, $matches, PREG_SET_ORDER);
-        preg_match_all('@(?<placeholder_with_tags>'.preg_quote(self::OPEN_TAG).'\s*(?<placeholder>'.self::PREFIX.'(?<name>[A-Z_]+)(\|options\((?<options>.*?)\))?\|[0-9]{6})\s*'.preg_quote(self::CLOSE_TAG).')@', $content, $matches, PREG_SET_ORDER);
+        preg_match_all('@(?<placeholder_with_tags>'.preg_quote(self::OPEN_TAG).'\s*(?<placeholder>'.self::PREFIX.'(?<name>[A-Z_\-]+)(\|options\((?<options>.*?)\))?\|[0-9]{6})\s*'.preg_quote(self::CLOSE_TAG).')@', $content, $matches, PREG_SET_ORDER);
 
         if (count($matches)) {
             $instances = [];
