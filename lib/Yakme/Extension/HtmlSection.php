@@ -53,6 +53,8 @@ class HtmlSection
             $subject .= sprintf('</div>%s</section>', SectionContainer::$appendHtml);
         }
 
+        $subject = preg_replace('@<section[\s\w\-="]*data-section[^>]*>.*?<div class="section-container"><\/div><\/section>@', '', $subject);
+
         $ep->setSubject($subject);
     }
 }
