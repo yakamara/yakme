@@ -515,7 +515,7 @@ class Media
             }
         }
 
-        $attributes = array_merge($videoAttributes, $attributes);
+        $attributes = array_filter(array_merge($videoAttributes, $attributes), function($item) { return !is_null($item); });
 
         return '
             <video'.\rex_string::buildAttributes($attributes).'>
