@@ -1,7 +1,5 @@
 <?php declare(strict_types=1);
 
-use Yakme\Html\SectionOption;
-
 /**
  * This file is part of the Yakme package.
  *
@@ -16,6 +14,7 @@ namespace Yakme\Extension;
 
 use Yakme\Html\Section;
 use Yakme\Html\SectionContainer;
+use Yakme\Html\SectionOption;
 
 class HtmlSection
 {
