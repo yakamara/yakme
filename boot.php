@@ -4,23 +4,27 @@
  * @var rex_addon $this
  */
 
+use Yakme\Download;
 use Yakme\Html\Section;
 use Yakme\Html\SectionOption;
+use Yakme\Yakme;
 
-require_once __DIR__.'/lib/Yakme/helper.php';
-require_once __DIR__.'/functions/textile_helper.php';
+//class_alias('\Yakme\Download', 'Download');
+//class_alias('\Yakme\Media', 'Media');
+//class_alias('\Yakme\MediaQuery', 'Mq');
+//class_alias('\Yakme\Sort', 'Sort');
+//class_alias('\Yakme\Yakme', 'Yakme');
 
-// Minibar explizit aktiv setzen. Wird ansonsten in Popups inaktiv gesetzt.
-// rex_extension::register('PACKAGES_INCLUDED', function () {
-//     rex_minibar::getInstance()->setActive(true);
-// });
+require_once __DIR__ . '/lib/Yakme/helper.php';
+require_once __DIR__ . '/functions/textile_helper.php';
+
 
 if (!function_exists('trans')) {
-    function trans($value)
-    {
-        return \Yakme::trans($value);
+    function trans($value) {
+        return Yakme::trans($value);
     }
 }
+
 
 if (rex_addon::get('media_manager')->isAvailable()) {
     rex_media_manager::addEffect(\rex_effect_responsive::class);
@@ -28,6 +32,7 @@ if (rex_addon::get('media_manager')->isAvailable()) {
 
 // rex_media_manager::deleteCache();
 rex_extension::register('MEDIA_MANAGER_FILTERSET', '\rex_effect_responsive::handle', rex_extension::EARLY);
+
 
 rex_extension::register('MEDIA_URL_REWRITE', function (rex_extension_point $ep) {
     $object = $ep->getParam('media');
@@ -40,8 +45,15 @@ rex_extension::register('MEDIA_URL_REWRITE', function (rex_extension_point $ep) 
         $type = 'rex_mediabutton_preview';
         $object->setSrcSet([]);
     }
-    return rex_url::frontend('images/'.$type.'/'.$object->media->getFileName());
+
+    $path = 'images/' . $type . '/';
+    if ($ep->getParam('size')) {
+        $path .= $ep->getParam('size') . '/';
+    }
+
+    return rex_url::frontend($path . $object->media->getFileName());
 }, rex_extension::EARLY);
+
 
 \rex_extension::register('MEDIA_IS_IN_USE', '\Yakme\Extension\YForm::isMediaInUse');
 \rex_extension::register('PACKAGES_INCLUDED', '\Yakme\Extension\YForm::isArticleInUse');
@@ -74,23 +86,24 @@ if ($downloadFile != '') {
     $download->force();
 }
 
+
 if (\rex::isBackend()) {
     \rex_view::addCssFile($this->getAssetsUrl('css/quick-navigation.css'));
-    \rex_view::addCssFile($this->getAssetsUrl('css/redaxo.css'));
-    \rex_view::addCssFile($this->getAssetsUrl('css/yform.css'));
     \rex_view::addCssFile($this->getAssetsUrl('modules/tabbed.css'));
     \rex_view::addJsFile($this->getAssetsUrl('modules/tabbed.js'));
 
     if (\rex_be_controller::getCurrentPagePart(1) == 'content') {
         \rex_view::addCssFile($this->getAssetsUrl('css/meta-info.css'));
-        \rex_extension::register('OUTPUT_FILTER', function (\rex_extension_point $ep) {
+        \rex_view::addCssFile($this->getAssetsUrl('css/slice.css'));
+
+        \rex_extension::register('OUTPUT_FILTER', function(\rex_extension_point $ep) {
             $article = \rex_article::get(rex_request('article_id', 'int'));
             if ($article) {
                 $level = count($article->getPathAsArray());
                 $ep->setSubject(
                     str_replace(
                         'class="rex-main-frame"',
-                        'class="rex-main-frame" data-structure-level="'.$level.'"',
+                        'class="rex-main-frame" data-structure-level="' . $level . '"',
                         $ep->getSubject()
                     )
                 );
@@ -102,17 +115,14 @@ if (\rex::isBackend()) {
 // YDeploy
 // - - - - - - - - - - - - - - - - - - - - - - - - - -
 if (\rex::isBackend() && \rex_addon::get('ydeploy')->isAvailable()) {
-    rex_extension::register('YDEPLOY_BADGE', function (rex_extension_point $ep) {
-        $ydeploy = rex_ydeploy::factory();
+    rex_extension::register('YDEPLOY_BADGE', function(rex_extension_point $ep) {
         $project = \rex_addon::get('project');
-        $version = isset($project->getProperty('app')['version']) ? ' - <small>Version '.$project->getProperty('app')['version'].'</small>' : '';
-
-        if ($ydeploy->isDeployed()) {
-            $version .= ' - '.rex_formatter::strftime($ydeploy->getTimestamp()->getTimestamp(), 'datetime');
-        }
-        $ep->setSubject($ep->getSubject().$version);
+        $version = isset($project->getProperty('app')['version']) ? ' - <small>Version ' . $project->getProperty('app')['version'] . '</small>' : '';
+        $ep->setSubject($ep->getSubject() . $version);
     });
 }
+
+
 
 if (\rex::isBackend() && \rex::getUser() && \rex::getUser()->isAdmin() && \rex_plugin::get('yform', 'manager') && count(\rex_yform_manager_table::getAll()) > 0) {
     \rex_extension::register('PAGES_PREPARED', function (\rex_extension_point $ep) {
@@ -144,35 +154,19 @@ if (\rex::isBackend() && \rex::getUser() && \rex::getUser()->isAdmin() && \rex_p
         $ep->setSubject($pages);
     }, \rex_extension::LATE);
 
-    \rex_extension::register('OUTPUT_FILTER', function (\rex_extension_point $ep) {
+    \rex_extension::register('OUTPUT_FILTER', function(\rex_extension_point $ep) {
         $ep->setSubject(
             str_replace(
                 [
                     '[translate:navigation_high_addons]',
-                    '[translate:navigation_low_addons]',
+                    '[translate:navigation_low_addons]'
                 ], [
                     \rex_i18n::msg('navigation_addons'),
-                    \rex_i18n::msg('navigation_addons').' (Andere)',
-                ],
+                    \rex_i18n::msg('navigation_addons') . ' (Andere)'
+                ]
+                ,
                 $ep->getSubject()
             )
         );
     });
-
-    if (\rex_be_controller::getCurrentPage() == 'yform/manager/data_edit') {
-        \rex_extension::register('OUTPUT_FILTER', function (\rex_extension_point $ep) {
-
-            preg_match_all('@<th>.*?</th>@', $ep->getSubject(), $matches);
-            $search = [];
-            $replace = [];
-            // dump($matches);
-            if (count($matches)) {
-                foreach ($matches[0] as $match) {
-                    $search[] = $match;
-                    $replace[] = htmlspecialchars_decode($match);
-                }
-            }
-            $ep->setSubject(str_replace($search, $replace,$ep->getSubject()));
-        });
-    }
 }

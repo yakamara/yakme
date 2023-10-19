@@ -1,0 +1,14 @@
+.rex-slice-input fieldset {
+}
+.rex-slice-input legend {
+    font-size: 16px;
+}
+.rex-slice-input .form-horizontal .control-label {
+    text-align: left;
+}
+.rex-slice-input .form-horizontal .form-group {
+    margin-bottom: 25px;
+}
+.rex-slice-input .form-horizontal .help-block {
+    margin-bottom: 0;
+}

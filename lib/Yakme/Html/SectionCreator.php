@@ -10,6 +10,7 @@
  * file that was distributed with this source code.
  */
 
+
 namespace Yakme\Html;
 
 class SectionCreator
@@ -19,7 +20,7 @@ class SectionCreator
 
     public function __construct($name)
     {
-        $this->name = strtoupper(\rex_string::normalize($name));
+        $this->name = $name;
     }
 
     public function addOption($optionName, $value)
@@ -27,7 +28,7 @@ class SectionCreator
         $options = Section::getAvailableOptions();
 
         if (!isset($options[$optionName])) {
-            throw new \rex_exception('$optionName is expected to define a subclass of SectionOption, "'.$optionName.'" given!');
+            throw new \rex_exception('$optionName is expected to define a subclass of SectionOption, "'. $optionName .'" given!');
         }
 
         return $this->options[$optionName] = json_encode($value);
@@ -42,15 +43,15 @@ class SectionCreator
         $string .= $this->name;
 
         if (count($this->options)) {
-            $options = array_map(function ($optionName, $value) {
-                return $optionName.'::=>::'.$value;
-            }, array_keys($this->options), array_values($this->options)
+            $options = array_map(function($optionName, $value) {
+                    return $optionName. '::=>::' . $value;
+                }, array_keys($this->options), array_values($this->options)
             );
 
-            $string .= '|options('.implode('::,::', $options).')';
+            $string .= '|options(' . implode('::,::', $options) . ')';
         }
 
-        $string .= '|'.rand(100, 999).rand(100, 999);
+        $string .= '|' . rand(100, 999) . rand(100, 999);
         $string .= ' ';
         $string .= Section::CLOSE_TAG;
 

@@ -20,39 +20,41 @@ class HtmlSection
 {
     public static function parse(\rex_extension_point $ep)
     {
+        SectionContainer::$isOpened = false;
+        $options = Section::getAvailableOptions();
         $subject = $ep->getSubject();
         $sections = Section::parse($subject);
+        if (count($sections)) {
+            $search = [];
+            $replace = [];
 
-        if (!$sections) {
-            return;
-        }
+            foreach ($sections as $section) {
+                $sectionContainer = new SectionContainer($section->getName());
 
-        $options = Section::getAvailableOptions();
-
-        $search = [];
-        $replace = [];
-
-        foreach ($sections as $section) {
-            $sectionContainer = new SectionContainer($section->getName());
-
-            if ($section->getOptions()) {
-                foreach ($section->getOptions() as $optionName => $value) {
-                    /* @var $availableOption SectionOption */
-                    $availableOption = $options[$optionName];
-                    $sectionContainer = $availableOption->fire($sectionContainer, $value);
+                if ($section->getOptions()) {
+                    foreach ($section->getOptions() as $optionName => $value) {
+                        /* @var $availableOption SectionOption */
+                        $availableOption = $options[$optionName];
+                        $sectionContainer = $availableOption->fire($sectionContainer, $value);
+                    }
                 }
+
+                $search[] = $section->getPlaceholderWithTags();
+                $replace[] = $sectionContainer->build();
             }
 
-            $search[] = $section->getPlaceholderWithTags();
-            $replace[] = $sectionContainer->build();
-        }
 
-        $subject = str_replace($search, $replace, $subject);
-        if (SectionContainer::$isOpened) {
-            $subject .= sprintf('</div>%s</section>', SectionContainer::$appendHtml);
+            $subject = str_replace($search, $replace, $subject);
+            if (SectionContainer::$isOpened) {
+                $subject .= sprintf('</div>%s</section>', SectionContainer::$appendHtml);
+            }
         }
+        // Diese Regex löschte vorherige Sektionen, wenn eine nachfolgende Sektion leer war.
+        // .*? müsste überprüft werden
+        //$subject = preg_replace('@<section[\s\w\-="]*data-section[^>]*>.*?<div class="section-container"><\/div><\/section>@', '', $subject);
 
-        $subject = preg_replace('@<section[\s\w\-="]*data-section[^>]*>.*?<div class="section-container"><\/div><\/section>@', '', $subject);
+        // Leere Sektionen löschen
+        $subject = preg_replace('@<section[\s\w\-="]*data-section[^>]*><div class="section-container"><\/div><\/section>@', '', $subject);
 
         $ep->setSubject($subject);
     }

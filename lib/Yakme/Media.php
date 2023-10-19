@@ -44,6 +44,13 @@ class Media
         'ogg' => 'video/ogg',
     ];
 
+    const SRCSET_ALL = [];
+    const SRCSET_SMALL = [
+        '200' => '200w',
+        '400' => '400w',
+        '800' => '800w',
+    ];
+
     public function __construct($name)
     {
         $this->media = \rex_media::get($name);
@@ -65,11 +72,17 @@ class Media
     }
 
     /**
+     * @param string $size
+     *
      * @return string
      */
-    public function getUrl()
+    public function getUrl($size = '')
     {
-        $url = \rex_extension::registerPoint(new \rex_extension_point('MEDIA_URL_REWRITE', '', ['media' => $this]));
+        $params = ['media' => $this];
+        if (isset($this->srcset[$size])) {
+            $params['size'] = $size;
+        }
+        $url = \rex_extension::registerPoint(new \rex_extension_point('MEDIA_URL_REWRITE', '', $params));
         return $url ?: \rex_url::media($this->media->getFileName());
     }
 
@@ -83,10 +96,7 @@ class Media
             $value = $value ?: '';
             return $value;
         }
-
-        $value = $this->media->getTitle();
-        $value = $value ?: '';
-        return $value;
+        return $this->media->getTitle();
     }
 
     /**
@@ -151,6 +161,7 @@ class Media
     public function setPictureAttributes($attributes)
     {
         $this->pictureAttributes = array_merge($this->pictureAttributes, $attributes);
+        return $this;
     }
 
     /**
@@ -184,7 +195,7 @@ class Media
      * @param string $url
      * @param array  $attributes
      *
-     * @return $this|\Yakme\Media
+     * @return $this|Media
      */
     public function addImageLink($url, array $attributes = [])
     {
@@ -214,9 +225,6 @@ class Media
     public function getCaption($field = 'med_caption')
     {
         $value = $this->media->getValue($field);
-        if (is_null($value)) {
-            $value = '';
-        }
         if ($value != '') {
             return trim($value);
         }
@@ -233,7 +241,7 @@ class Media
      * @param string $value
      * @param array  $attributes
      *
-     * @return $this|\Yakme\Media
+     * @return $this|Media
      */
     public function setCaption($value, array $attributes = [])
     {
@@ -249,7 +257,7 @@ class Media
      * @param array  $attributes
      * @param string $field
      *
-     * @return $this|\Yakme\Media
+     * @return $this|Media
      */
     public function withCaption(array $attributes = [], $field = 'med_caption')
     {
@@ -269,11 +277,7 @@ class Media
      */
     public function getCopyright($field = 'med_copyright')
     {
-        $value = $this->media->getValue($field);
-        if (is_null($value)) {
-            $value = '';
-        }
-        $value = trim($value);
+        $value = trim($this->media->getValue($field));
         if ($value != '') {
             return $value;
         }
@@ -285,7 +289,7 @@ class Media
      * @param string $value
      * @param array  $attributes
      *
-     * @return $this|\Yakme\Media
+     * @return $this|Media
      */
     public function setCopyright($value, array $attributes = [])
     {
@@ -301,7 +305,7 @@ class Media
      * @param array  $attributes
      * @param string $field
      *
-     * @return $this|\Yakme\Media
+     * @return $this|Media
      */
     public function withCopyright(array $attributes = [], $field = 'med_copyright')
     {
@@ -663,7 +667,7 @@ class Media
         }
 
         $sourceTags = [];
-        if (count($this->pictureSources) > 0) {
+        if (count($this->pictureSources) > 0 && $this->isRasterFile()) {
             foreach ($this->pictureSources as $index => $pictureSource) {
                 $attributes = [];
                 if ($pictureSource['media'] != '') {
@@ -687,16 +691,15 @@ class Media
         }
 
         $tmpPath = pathinfo($filename, PATHINFO_DIRNAME);
-        $filename = str_replace($this->getMediaType().'/', $this->getMediaType().'/400/', $filename);
-
+        $filename = str_replace($this->getMediaType(), $this->getMediaType().'/400', $filename);
         $sources = [];
         foreach ($srcSet as $size => $file) {
             $sources[] = $tmpPath.$file.' '.$size;
         }
-        if (count($sources)) {
+        if ($this->isRasterFile() && count($sources)) {
             $attributesImage['srcset'] = implode(','."\n", $sources);
         }
-        if ($this->imageSizes != '') {
+        if ($this->isRasterFile() && $this->imageSizes != '') {
             $attributesImage['sizes'] = $this->imageSizes;
         }
 

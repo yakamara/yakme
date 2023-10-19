@@ -19,15 +19,15 @@ abstract class SectionOption
      *
      * @return string
      */
-    abstract public function name();
+    abstract function name();
 
     /**
-     * Execute the option.
+     * Execute the option
      *
-     * @param SectionContainer $sectionContainer
-     * @param array|string     $arguments
+     * @param  SectionContainer $sectionContainer
+     * @param  string $arguments
      *
      * @return SectionContainer
      */
-    abstract public function fire(SectionContainer $sectionContainer, $arguments);
+    abstract function fire(SectionContainer $sectionContainer, $arguments);
 }

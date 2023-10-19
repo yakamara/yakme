@@ -10,6 +10,7 @@
  * file that was distributed with this source code.
  */
 
+
 namespace Yakme\Html;
 
 class Section
@@ -42,7 +43,8 @@ class Section
             if (count($options)) {
                 foreach ($options as $option) {
                     $optionPair = explode('::=>::', $option);
-                    $this->options[$optionPair[0]] = json_decode($optionPair[1], true);
+                    $this->options[$optionPair[0]] = json_decode($optionPair[1]);
+
                 }
             }
         }
@@ -83,7 +85,7 @@ class Section
     /**
      * @param string $content
      *
-     * @return null|self[]
+     * @return array|self[]
      */
     public static function parse($content)
     {
@@ -91,6 +93,7 @@ class Section
         preg_match_all('@(?<placeholder_with_tags>'.preg_quote(self::OPEN_TAG).'\s*(?<placeholder>'.self::PREFIX.'(?<name>[A-Z_\-]+)(\|options\((?<options>.*?)\))?\|[0-9]{6})\s*'.preg_quote(self::CLOSE_TAG).')@', $content, $matches, PREG_SET_ORDER);
 
         if (count($matches)) {
+            //dd($matches);
             $instances = [];
             foreach ($matches as $match) {
                 if (substr($match['placeholder'], 0, strlen(self::PREFIX)) == self::PREFIX) {
@@ -99,6 +102,6 @@ class Section
             }
             return $instances;
         }
-        return null;
+        return [];
     }
 }
